@@ -23,7 +23,7 @@
 			<ComponentSpacer>2</ComponentSpacer>
 		</costList>
 		<hediffToApply>ChjAndroidUpgrade_HyperweaveSkin</hediffToApply>
-		<changeSkinColor>True</changeSkinColor>
+		<changeSkinColor>False</changeSkinColor>
 		<newSkinColor>(0,106,126)</newSkinColor>
 		<extraPrintingTime>10000</extraPrintingTime>
 		<requiredResearch>ChJAndroidUpgrade_Skin</requiredResearch>
@@ -45,7 +45,7 @@
 			<ComponentSpacer>2</ComponentSpacer>
 		</costList>
 		<hediffToApply>ChjAndroidUpgrade_PlasteelSkin</hediffToApply>
-		<changeSkinColor>True</changeSkinColor>
+		<changeSkinColor>False</changeSkinColor>
 		<newSkinColor>(160,178,181)</newSkinColor>
 		<partsDepth>Outside</partsDepth>
 		<extraPrintingTime>10000</extraPrintingTime>
@@ -69,7 +69,7 @@
 			<Hyperweave>50</Hyperweave>
 		</costList>
 		<hediffToApply>ChjAndroidUpgrade_DragonScales</hediffToApply>
-		<changeSkinColor>True</changeSkinColor>
+		<changeSkinColor>False</changeSkinColor>
 		<newSkinColor>(180,60,60)</newSkinColor>
 		<extraPrintingTime>20000</extraPrintingTime>
 		<requiredResearch>ChJAndroidUpgrade_Skin</requiredResearch>
@@ -100,7 +100,7 @@
 			<ComponentSpacer>2</ComponentSpacer>
 		</costList>
 		<hediffToApply>ChjAndroidUpgrade_HyperweaveSkin</hediffToApply>
-		<changeSkinColor>True</changeSkinColor>
+		<changeSkinColor>False</changeSkinColor>
 		<newSkinColor>(0,106,126)</newSkinColor>
 		<extraPrintingTime>10000</extraPrintingTime>
 		<removalPrintingTime>5000</removalPrintingTime>
@@ -123,7 +123,7 @@
 			<ComponentSpacer>2</ComponentSpacer>
 		</costList>
 		<hediffToApply>ChjAndroidUpgrade_PlasteelSkin</hediffToApply>
-		<changeSkinColor>True</changeSkinColor>
+		<changeSkinColor>False</changeSkinColor>
 		<newSkinColor>(160,178,181)</newSkinColor>
 		<partsDepth>Outside</partsDepth>
 		<extraPrintingTime>10000</extraPrintingTime>
@@ -147,7 +147,7 @@
 			<ComponentSpacer>4</ComponentSpacer>
 		</costList>
 		<hediffToApply>ChjAndroidUpgrade_DragonScales</hediffToApply>
-		<changeSkinColor>True</changeSkinColor>
+		<changeSkinColor>False</changeSkinColor>
 		<newSkinColor>(180,60,60)</newSkinColor>
 		<extraPrintingTime>20000</extraPrintingTime>
 		<removalPrintingTime>10000</removalPrintingTime>
