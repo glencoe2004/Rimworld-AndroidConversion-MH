@@ -578,8 +578,8 @@ public class AndroidConversionWindow : Window
 		Pawn currentPawn = androidConverter.currentPawn;
 		if (!currentPawn.IsTX3() && currentPawn.IsHuman()) // No confirm for this - upgrading human to TX3 is not optional
 		{
-			// Get TX3 Android Generator ThingDef and use its costList
-			ThingDef tx3GeneratorDef = DefDatabase<ThingDef>.GetNamedSilentFail("ATPP_TX3AndroidGenerator");
+			// Use cached DefOf instead of DefDatabase lookup
+			ThingDef tx3GeneratorDef = AndroidConversionDefOf.ATPP_TX3AndroidGenerator;
 			if (tx3GeneratorDef != null && doAndroidRecipes)
 			{
 				AddCostsFromThingDef(tx3GeneratorDef, true, false, "Meat_Human");
@@ -587,7 +587,7 @@ public class AndroidConversionWindow : Window
 			else
 			{
 				// Fallback to hardcoded values if ThingDef not found
-				Log.Warning("ATPP_TX3AndroidGenerator ThingDef not found, using fallback costs for TX3 conversion");
+				Log.Warning("ATPP_TX3AndroidGenerator ThingDef not found in DefOf cache, using fallback costs for TX3 conversion");
 
 				finalConversionTimeCost += 28500;
 
@@ -667,16 +667,16 @@ public class AndroidConversionWindow : Window
 		// Convert TX3 to TX4
 		if (currentPawn.IsTX3() && convertTX3ToTX4)
 		{
-			// Get TX4 Android Generator ThingDef and use its costList
-			ThingDef tx3GeneratorDef = DefDatabase<ThingDef>.GetNamedSilentFail("ATPP_TX4AndroidGenerator");
-			if (tx3GeneratorDef != null && doAndroidRecipes)
+			// Use cached DefOf instead of DefDatabase lookup
+			ThingDef tx4GeneratorDef = AndroidConversionDefOf.ATPP_TX4AndroidGenerator;
+			if (tx4GeneratorDef != null && doAndroidRecipes)
 			{
-				AddCostsFromThingDef(tx3GeneratorDef, true, true, "Meat_Human");
+				AddCostsFromThingDef(tx4GeneratorDef, true, true, "Meat_Human");
 			}
 			else
 			{
 				// Fallback to hardcoded values if ThingDef not found
-				Log.Warning("ATPP_TX4AndroidGenerator ThingDef not found, using fallback costs for TX4 conversion");
+				Log.Warning("ATPP_TX4AndroidGenerator ThingDef not found in DefOf cache, using fallback costs for TX4 conversion");
 
 				finalConversionTimeCost += 18250;
 

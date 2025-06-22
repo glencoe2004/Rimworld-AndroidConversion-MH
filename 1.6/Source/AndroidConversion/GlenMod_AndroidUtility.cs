@@ -19,11 +19,11 @@ namespace AndroidConversion
                 return;
             }
 
-            // Check if pawn already has the android hediff
-            HediffDef androidHediff = DefDatabase<HediffDef>.GetNamed("ChjAndroidLike", false);
+            // Use cached DefOf instead of DefDatabase lookup
+            HediffDef androidHediff = AndroidConversionDefOf.ChjAndroidLike;
             if (androidHediff == null)
             {
-                Log.Error("AndroidUtility.AddAndroidHediff: Could not find HediffDef 'ChjAndroidLike'");
+                Log.Error("AndroidUtility.AddAndroidHediff: Could not find HediffDef 'ChjAndroidLike' in DefOf cache");
                 return;
             }
 
@@ -55,7 +55,8 @@ namespace AndroidConversion
             List<Hediff> hediffsToRemove = new List<Hediff>();
             foreach (Hediff hediff in pawn.health.hediffSet.hediffs.ToList())
             {
-                if (hediff.def.isBad && hediff.def.defName != "ChjAndroidLike")
+                // Use cached DefOf instead of string comparison
+                if (hediff.def.isBad && hediff.def != AndroidConversionDefOf.ChjAndroidLike)
                 {
                     hediffsToRemove.Add(hediff);
                 }

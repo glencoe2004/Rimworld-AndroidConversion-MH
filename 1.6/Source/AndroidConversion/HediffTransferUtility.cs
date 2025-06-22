@@ -55,6 +55,7 @@ namespace AndroidConversion
             { "Toe", "ATR_MechanicalFoot" }
         };
 
+
         public static List<HediffSnapshot> PrepareHediffTransfer(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null)
@@ -127,6 +128,19 @@ namespace AndroidConversion
             return snapshots;
         }
 
+        // Cache for reflection results to avoid repeated reflection calls
+        private static readonly Dictionary<Type, FieldInfo[]> TypeFieldCache = new Dictionary<Type, FieldInfo[]>();
+
+        private static FieldInfo[] GetCachedFields(Type type)
+        {
+            if (!TypeFieldCache.TryGetValue(type, out FieldInfo[] fields))
+            {
+                fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                TypeFieldCache[type] = fields;
+            }
+            return fields;
+        }
+
         private static HediffSnapshot CreateHediffSnapshot(Hediff hediff, string targetBodyPartDef)
         {
             try
@@ -140,8 +154,8 @@ namespace AndroidConversion
                     FieldValues = new Dictionary<string, object>()
                 };
 
-                // Get all fields using reflection
-                FieldInfo[] fields = hediff.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                // Use cached fields instead of reflection on every call
+                FieldInfo[] fields = GetCachedFields(hediff.GetType());
 
                 foreach (FieldInfo field in fields)
                 {
@@ -260,12 +274,18 @@ namespace AndroidConversion
         {
             Type hediffType = hediff.GetType();
 
+            // Use cached fields instead of reflection on every call
+            FieldInfo[] fields = GetCachedFields(hediffType);
+
+            // Create a lookup dictionary for faster field access
+            Dictionary<string, FieldInfo> fieldLookup = fields.ToDictionary(f => f.Name, f => f);
+
             foreach (var kvp in fieldValues)
             {
                 try
                 {
-                    FieldInfo field = hediffType.GetField(kvp.Key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (field != null && !field.IsInitOnly && !field.IsLiteral)
+                    if (fieldLookup.TryGetValue(kvp.Key, out FieldInfo field) &&
+                        !field.IsInitOnly && !field.IsLiteral)
                     {
                         field.SetValue(hediff, kvp.Value);
                     }
@@ -294,6 +314,8 @@ namespace AndroidConversion
             return null;
         }
 
+        private static readonly Dictionary<string, BodyPartDef> BodyPartDefCache = new Dictionary<string, BodyPartDef>();
+
         private static BodyPartRecord FindAndroidBodyPart(Pawn pawn, string targetDefName, string originalLabel)
         {
             if (pawn?.RaceProps?.body?.AllParts == null)
@@ -301,8 +323,11 @@ namespace AndroidConversion
 
             Log.Message($"Looking for target part: {targetDefName} (from original: {originalLabel})");
 
+            // Cache the body parts for this pawn's race to avoid repeated access
+            var allParts = pawn.RaceProps.body.AllParts;
+
             // First, try to find exact match with similar labeling
-            foreach (BodyPartRecord part in pawn.RaceProps.body.AllParts)
+            foreach (BodyPartRecord part in allParts)
             {
                 if (part.def.defName == targetDefName)
                 {
@@ -343,7 +368,7 @@ namespace AndroidConversion
             }
 
             // Fallback: just find the first part with the target def name
-            BodyPartRecord fallback = pawn.RaceProps.body.AllParts.FirstOrDefault(part => part.def.defName == targetDefName);
+            BodyPartRecord fallback = allParts.FirstOrDefault(part => part.def.defName == targetDefName);
             if (fallback != null)
             {
                 Log.Message($"Using fallback match: {fallback.Label}");

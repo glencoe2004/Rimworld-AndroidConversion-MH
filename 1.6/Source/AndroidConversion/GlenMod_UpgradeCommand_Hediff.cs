@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Verse;
 
@@ -24,17 +25,22 @@ namespace AndroidConversion
 				}
 				if (def.partsToApplyTo != null)
 				{
+					// Cache the body parts lookup to avoid repeated calls
+					var notMissingParts = pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Outside);
+
 					foreach (BodyPartGroupDef item in def.partsToApplyTo)
 					{
-						foreach (BodyPartRecord notMissingPart in pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Outside))
+						// Filter parts once instead of checking each part individually
+						var relevantParts = notMissingParts.Where(part =>
+							part.IsInGroup(item) &&
+							(def.partsDepth == BodyPartDepth.Undefined || part.depth == def.partsDepth));
+
+						foreach (BodyPartRecord bodyPart in relevantParts)
 						{
-							if (notMissingPart.IsInGroup(item) && (def.partsDepth == BodyPartDepth.Undefined || notMissingPart.depth == def.partsDepth))
-							{
-								Hediff hediff = HediffMaker.MakeHediff(def.hediffToApply, pawn, notMissingPart);
-								hediff.Severity = def.hediffSeverity;
-								appliedHediffs.Add(hediff);
-								pawn.health.AddHediff(hediff);
-							}
+							Hediff hediff = HediffMaker.MakeHediff(def.hediffToApply, pawn, bodyPart);
+							hediff.Severity = def.hediffSeverity;
+							appliedHediffs.Add(hediff);
+							pawn.health.AddHediff(hediff);
 						}
 					}
 					return;
@@ -60,6 +66,8 @@ namespace AndroidConversion
 				Log.Error("customizationWindow is null! Impossible to remove Hediffs without it.");
 				return;
 			}
+
+			// Remove all applied hediffs in batch
 			foreach (Hediff appliedHediff in appliedHediffs)
 			{
 				customizationWindow.androidConverter.newPawn.health.RemoveHediff(appliedHediff);

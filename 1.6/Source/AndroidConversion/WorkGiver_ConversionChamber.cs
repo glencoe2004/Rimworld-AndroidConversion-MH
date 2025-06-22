@@ -8,7 +8,8 @@ namespace AndroidConversion;
 
 internal class WorkGiver_ConversionChamber : WorkGiver_HaulToBiosculpterPod
 {
-	public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForDef(ThingDefOf.DekConversionChamber);
+	// Use cached DefOf instead of DefDatabase lookup
+	public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForDef(AndroidConversionDefOf.DekConversionChamber);
 
 	public override PathEndMode PathEndMode => PathEndMode.Touch;
 
@@ -55,7 +56,8 @@ internal class WorkGiver_ConversionChamber : WorkGiver_HaulToBiosculpterPod
 				{
 					if (!thingOrderRequest.nutrition)
 					{
-						return new Job(JobDefOf.DekFillConversionChamber, thing, printerThing)
+						// Use cached DefOf instead of DefDatabase lookup
+						return new Job(AndroidConversionDefOf.DekFillConversionChamber, thing, printerThing)
 						{
 							count = (int)thingOrderRequest.amount
 						};
@@ -63,7 +65,8 @@ internal class WorkGiver_ConversionChamber : WorkGiver_HaulToBiosculpterPod
 					int num = (int)Math.Ceiling(thingOrderRequest.amount / thing.def.ingestible.CachedNutrition);
 					if (num > 0)
 					{
-						return new Job(JobDefOf.DekFillConversionChamber, thing, printerThing)
+						// Use cached DefOf instead of DefDatabase lookup
+						return new Job(AndroidConversionDefOf.DekFillConversionChamber, thing, printerThing)
 						{
 							count = num
 						};

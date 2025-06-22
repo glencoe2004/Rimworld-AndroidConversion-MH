@@ -276,13 +276,11 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			// CRITICAL: Change race definition PROPERLY
 			if (HumanToTX3)
 			{
-				ThingDef tx3Def = ThingDef.Named("ATPP_Android3TX");
-				PawnKindDef tx3Kind = PawnKindDef.Named("ATPP_Android3TXKind");
-
-				if (tx3Def != null && tx3Kind != null)
+				// Use cached DefOf instead of DefDatabase lookup
+				if (AndroidConversionDefOf.ATPP_Android3TX != null && AndroidConversionDefOf.ATPP_Android3TXKind != null)
 				{
-					currentPawn.def = tx3Def;
-					currentPawn.kindDef = tx3Kind;
+					currentPawn.def = AndroidConversionDefOf.ATPP_Android3TX;
+					currentPawn.kindDef = AndroidConversionDefOf.ATPP_Android3TXKind;
 
 					// Force regenerate components for new race
 					currentPawn.ageTracker = new Pawn_AgeTracker(currentPawn);
@@ -297,19 +295,18 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				}
 				else
 				{
-					Log.Error("Could not find TX3 ThingDef or PawnKindDef");
+					Log.Error("Could not find TX3 ThingDef or PawnKindDef in DefOf cache");
 				}
 			}
 
+
 			if (TX3ToTX4)
 			{
-				ThingDef tx4Def = ThingDef.Named("ATPP_Android4TX");
-				PawnKindDef tx4Kind = PawnKindDef.Named("ATPP_Android4TXKind");
-
-				if (tx4Def != null && tx4Kind != null)
+				// Use cached DefOf instead of DefDatabase lookup
+				if (AndroidConversionDefOf.ATPP_Android4TX != null && AndroidConversionDefOf.ATPP_Android4TXKind != null)
 				{
-					currentPawn.def = tx4Def;
-					currentPawn.kindDef = tx4Kind;
+					currentPawn.def = AndroidConversionDefOf.ATPP_Android4TX;
+					currentPawn.kindDef = AndroidConversionDefOf.ATPP_Android4TXKind;
 
 					// Force regenerate components for new race
 					currentPawn.ageTracker = new Pawn_AgeTracker(currentPawn);
@@ -324,7 +321,7 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				}
 				else
 				{
-					Log.Error("Could not find TX4 ThingDef or PawnKindDef");
+					Log.Error("Could not find TX4 ThingDef or PawnKindDef in DefOf cache");
 				}
 			}
 
@@ -369,7 +366,8 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				List<Hediff> hediffsToRemove = new List<Hediff>();
 				foreach (Hediff hediff in currentPawn.health.hediffSet.hediffs)
 				{
-					if (hediff.def.isBad && hediff.def.defName != "ChjAndroidLike")
+					// Use cached DefOf instead of string comparison
+					if (hediff.def.isBad && hediff.def != AndroidConversionDefOf.ChjAndroidLike)
 					{
 						hediffsToRemove.Add(hediff);
 					}
@@ -489,7 +487,8 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			yield return new FloatMenuOption("CannotBeConverted".Translate(), null);
 			yield break;
 		}
-		JobDef jobDef = JobDefOf.DekEnterConversionChamber;
+		// Use cached DefOf instead of DefDatabase lookup
+		JobDef jobDef = AndroidConversionDefOf.DekEnterConversionChamber;
 		string text = "EnterConversionChamber".Translate();
 		Action action = delegate
 		{

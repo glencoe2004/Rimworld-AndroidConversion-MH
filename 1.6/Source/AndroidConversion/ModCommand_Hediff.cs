@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using Verse;
 
@@ -9,7 +10,8 @@ public class ModCommand_Hediff : ModCommand
 	{
 		if (def.hediffToApply != null)
 		{
-			return customTarget.health.hediffSet.hediffs.FirstOrDefault((Hediff target) => target.def == def.hediffToApply) != null;
+			// Use Any() instead of FirstOrDefault() for better performance when we only need to check existence
+			return customTarget.health.hediffSet.hediffs.Any(hediff => hediff.def == def.hediffToApply);
 		}
 		return false;
 	}
@@ -64,7 +66,14 @@ public class ModCommand_Hediff : ModCommand
 			{
 				return;
 			}
-			for (Hediff hediff = customTarget.health.hediffSet.hediffs.FirstOrDefault((Hediff target) => target.def == def.hediffToApply); hediff != null; hediff = customTarget.health.hediffSet.hediffs.FirstOrDefault((Hediff target) => target.def == def.hediffToApply))
+
+			// Collect all hediffs to remove first, then remove them
+			// This avoids modifying the collection while iterating
+			var hediffsToRemove = customTarget.health.hediffSet.hediffs
+				.Where(hediff => hediff.def == def.hediffToApply)
+				.ToList();
+
+			foreach (Hediff hediff in hediffsToRemove)
 			{
 				customTarget.health.RemoveHediff(hediff);
 			}

@@ -9,8 +9,8 @@ using AlienRace;
 
 namespace AndroidConversion
 {
-    public static class GlenMod_RaceUtility
-    {
+	public static class GlenMod_RaceUtility
+	{
 		private static List<PawnKindDef> alienRaceKindsint = new List<PawnKindDef>();
 
 		private static bool alienRaceKindSearchDoneint = false;
@@ -56,8 +56,8 @@ namespace AndroidConversion
 			if (pawnExtension != null)
 				return true;
 
-			// Use DefDatabase instead of DefOf to avoid initialization timing issues
-			HediffDef androidHediff = DefDatabase<HediffDef>.GetNamed("ChjAndroidLike", false);
+			// Use cached DefOf instead of DefDatabase lookup
+			HediffDef androidHediff = AndroidConversionDefOf.ChjAndroidLike;
 			return androidHediff != null && pawn.health.hediffSet.HasHediff(androidHediff);
 		}
 
@@ -100,11 +100,19 @@ namespace AndroidConversion
 			{
 				return false;
 			}
-			// Check if the pawn's race is specifically "ATPP_Android3TX"
+
+			// Use cached DefOf instead of string comparison
+			if (AndroidConversionDefOf.ATPP_Android3TX != null && pawn.def == AndroidConversionDefOf.ATPP_Android3TX)
+			{
+				return true;
+			}
+
+			// Fallback to string comparison for compatibility
 			if (pawn.def.defName == "ATPP_Android3TX")
 			{
 				return true;
 			}
+
 			// Additional check: if it's in the alien races list,
 			// and the race defName is ATPP_Android3TX, then it's a TX3
 			return pawn.kindDef != null &&
@@ -124,11 +132,19 @@ namespace AndroidConversion
 			{
 				return false;
 			}
-			// Check if the pawn's race is specifically "ATPP_Android4TX"
+
+			// Use cached DefOf instead of string comparison
+			if (AndroidConversionDefOf.ATPP_Android4TX != null && pawn.def == AndroidConversionDefOf.ATPP_Android4TX)
+			{
+				return true;
+			}
+
+			// Fallback to string comparison for compatibility
 			if (pawn.def.defName == "ATPP_Android4TX")
 			{
 				return true;
 			}
+
 			// Additional check: if it's in the alien races list,
 			// and the race defName is ATPP_Android4TX, then it's a TX4
 			return pawn.kindDef != null &&

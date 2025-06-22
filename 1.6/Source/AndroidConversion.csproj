@@ -70,6 +70,7 @@
     <Compile Include="AndroidConversion\GlenMod_AndroidUpgradeHediffProperties.cs" />
     <Compile Include="AndroidConversion\GlenMod_AndroidUtility.cs" />
     <Compile Include="AndroidConversion\GlenMod_AndroidValueStatPartcs.cs" />
+    <Compile Include="AndroidConversion\GlenMod_AndroidConversionDefOf.cs" />
     <Compile Include="AndroidConversion\GlenMod_Hediff_MechaniteHive.cs" />
     <Compile Include="AndroidConversion\GlenMod_Hediff_VanometricCell.cs" />
     <Compile Include="AndroidConversion\GlenMod_ITab_ConversionChamber.cs" />
@@ -86,7 +87,6 @@
     <Compile Include="AndroidConversion\GlenMod_UpgradeCommand_Skin.cs" />
     <Compile Include="AndroidConversion\GlenMod_UpgradeMaker.cs" />
     <Compile Include="AndroidConversion\ITab_ContentsConversionChamber.cs" />
-    <Compile Include="AndroidConversion\JobDefOf.cs" />
     <Compile Include="AndroidConversion\JobDriver_EnterConversionChamber.cs" />
     <Compile Include="AndroidConversion\JobDriver_FillConversionChamber.cs" />
     <Compile Include="AndroidConversion\ModCommand.cs" />
@@ -96,7 +96,6 @@
     <Compile Include="AndroidConversion\ModdingStatus.cs" />
     <Compile Include="AndroidConversion\ModMaker.cs" />
     <Compile Include="AndroidConversion\PawnConversionProperites.cs" />
-    <Compile Include="AndroidConversion\ThingDefOf.cs" />
     <Compile Include="AndroidConversion\WorkGiver_ConversionChamber.cs" />
     <Compile Include="AndroidConversion\GlenMod_ThingOrderRequest.cs" />
     <Compile Include="AndroidConversion\HediffTransferUtility.cs" />

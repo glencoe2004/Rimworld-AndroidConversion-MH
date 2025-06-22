@@ -7,10 +7,10 @@ namespace AndroidConversion;
 
 public class JobDriver_EnterConversionChamber : JobDriver
 {
-	public override bool TryMakePreToilReservations(bool errorOnFailed)
-	{
-		return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
-	}
+    public override bool TryMakePreToilReservations(bool errorOnFailed)
+    {
+        return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
+    }
 
     protected override IEnumerable<Toil> MakeNewToils()
     {
