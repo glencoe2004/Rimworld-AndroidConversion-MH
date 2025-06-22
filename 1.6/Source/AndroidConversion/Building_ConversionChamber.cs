@@ -56,7 +56,14 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 
 	public bool TX3ToTX4 = false;
 
+	// VTR related fields
+	private int ticksSinceLastVTRUpdate = 0;
+	private bool needsPowerAdjustment = false;
+	private bool needsStatusCheck = false;
 
+	// VTR Configuration - Override the default tick rates
+	protected override int MinTickIntervalRate => 4; // Minimum 4Hz when far away/off camera
+	protected override int MaxTickIntervalRate => 60; // Maximum 60Hz when active
 
 	public Thing ContainedThing
 	{
@@ -151,6 +158,7 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				contentsKnown = true;
 			}
 			ChamberStatus = ModdingStatus.Idle;
+			needsStatusCheck = true; // Flag for VTR update
 			return true;
 		}
 		Log.Warning("Could not add to container");
@@ -192,6 +200,7 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 	{
 		ChamberStatus = ModdingStatus.WaitingForPawn;
 		orderProcessor.requestedItems.Clear();
+		needsStatusCheck = true; // Flag for VTR update
 	}
 
 	public bool IsPawnAndroid()
@@ -437,19 +446,134 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 		{
 			list.Insert(0, new Gizmo_AbortMod(this));
 		}
-		if (DebugSettings.godMode && (ChamberStatus == ModdingStatus.Filling || ChamberStatus == ModdingStatus.Modding))
+
+		// Debug mode gizmos
+		if (DebugSettings.godMode)
 		{
-			list.Insert(0, new Command_Action
+			// Instant fill gizmo - only show when filling or when we have requested items
+			if (ChamberStatus == ModdingStatus.Filling || (orderProcessor?.requestedItems?.Count > 0))
 			{
-				defaultLabel = "DEBUG: Finish modding.",
-				defaultDesc = "Finishes modding the pawn.",
-				action = delegate
+				list.Insert(0, new Command_Action
 				{
-					ChamberStatus = ModdingStatus.Finished;
-				}
-			});
+					defaultLabel = "DEBUG: Instant fill",
+					defaultDesc = "Instantly spawns all required materials into the conversion chamber.",
+					action = delegate
+					{
+						DebugInstantFill();
+					}
+				});
+			}
+
+			// Finish modding gizmo
+			if (ChamberStatus == ModdingStatus.Filling || ChamberStatus == ModdingStatus.Modding)
+			{
+				list.Insert(0, new Command_Action
+				{
+					defaultLabel = "DEBUG: Finish modding",
+					defaultDesc = "Finishes modding the pawn instantly.",
+					action = delegate
+					{
+						ChamberStatus = ModdingStatus.Finished;
+						needsStatusCheck = true; // Flag for VTR update
+					}
+				});
+			}
 		}
 		return list;
+	}
+
+	/// <summary>
+	/// Debug method to instantly fill the conversion chamber with all required materials
+	/// </summary>
+	private void DebugInstantFill()
+	{
+		if (!DebugSettings.godMode)
+		{
+			Log.Warning("DebugInstantFill called outside of god mode!");
+			return;
+		}
+
+		if (orderProcessor?.requestedItems == null || orderProcessor.requestedItems.Count == 0)
+		{
+			Messages.Message("No materials are currently requested by this conversion chamber.", MessageTypeDefOf.RejectInput);
+			return;
+		}
+
+		int itemsSpawned = 0;
+		int nutritionSpawned = 0;
+
+		foreach (ThingOrderRequest request in orderProcessor.requestedItems)
+		{
+			try
+			{
+				if (request.nutrition)
+				{
+					// For nutrition requests, spawn simple meals
+					float currentNutrition = CountNutrition();
+					float neededNutrition = request.amount - currentNutrition;
+
+					if (neededNutrition > 0f)
+					{
+						// Simple meals provide 0.9 nutrition each
+						int mealsNeeded = Mathf.CeilToInt(neededNutrition / 0.9f);
+
+						Thing meals = ThingMaker.MakeThing(RimWorld.ThingDefOf.MealSimple);
+						meals.stackCount = mealsNeeded;
+
+						if (ingredients.TryAdd(meals))
+						{
+							nutritionSpawned += mealsNeeded;
+							Log.Message($"DEBUG: Spawned {mealsNeeded} simple meals for {neededNutrition} nutrition");
+						}
+						else
+						{
+							Log.Warning($"Failed to add {mealsNeeded} simple meals to conversion chamber");
+						}
+					}
+				}
+				else if (request.thingDef != null)
+				{
+					// For regular item requests
+					int currentAmount = ingredients.TotalStackCountOfDef(request.thingDef);
+					int neededAmount = Mathf.CeilToInt(request.amount) - currentAmount;
+
+					if (neededAmount > 0)
+					{
+						Thing item = ThingMaker.MakeThing(request.thingDef);
+						item.stackCount = neededAmount;
+
+						if (ingredients.TryAdd(item))
+						{
+							itemsSpawned++;
+							Log.Message($"DEBUG: Spawned {neededAmount}x {request.thingDef.LabelCap}");
+						}
+						else
+						{
+							Log.Warning($"Failed to add {neededAmount}x {request.thingDef.LabelCap} to conversion chamber");
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Error($"Error spawning debug item {request.thingDef?.defName ?? "nutrition"}: {ex.Message}");
+			}
+		}
+
+		// Show summary message
+		string message = $"DEBUG: Instantly filled conversion chamber with {itemsSpawned} item types";
+		if (nutritionSpawned > 0)
+		{
+			message += $" and {nutritionSpawned} meals";
+		}
+		message += ".";
+
+		Messages.Message(message, this, MessageTypeDefOf.TaskCompletion);
+
+		// Trigger status check to potentially advance to modding phase
+		needsStatusCheck = true;
+
+		Log.Message($"DEBUG: Conversion chamber instant fill completed. Status: {ChamberStatus}");
 	}
 
 	public bool CanEnter(Pawn testPawn)
@@ -577,6 +701,10 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 					conversionProperties = new PawnConversionProperites();
 				}
 			}
+
+			// Reset VTR flags
+			needsPowerAdjustment = true;
+			needsStatusCheck = true;
 		}
 	}
 
@@ -625,42 +753,112 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 		return stringBuilder.ToString().TrimEndNewlines();
 	}
 
+	// Override VTR property to determine current tick rate based on activity
+	public override int UpdateRateTicks
+	{
+		get
+		{
+			// Always run at full speed during critical operations
+			if (ChamberStatus == ModdingStatus.Modding || ChamberStatus == ModdingStatus.Filling)
+			{
+				return 1; // 60Hz for active conversion
+			}
+
+			// Run at medium speed when idle but has contents
+			if (HasAnyContents)
+			{
+				return 4; // 15Hz when containing a pawn but idle
+			}
+
+			// Run at slow speed when completely inactive
+			return 15; // 4Hz when empty and waiting
+		}
+	}
+
+	// Legacy Tick method - now only handles critical per-tick operations
 	protected override void Tick()
 	{
 		base.Tick();
-		AdjustPowerNeed();
+
+		// Track ticks for VTR operations
+		ticksSinceLastVTRUpdate++;
+
+		// Handle power adjustments more frequently for responsiveness
+		if (needsPowerAdjustment || ticksSinceLastVTRUpdate % 5 == 0)
+		{
+			AdjustPowerNeed();
+			needsPowerAdjustment = false;
+		}
+
+		// Handle sound sustainer every tick for smoothness
 		if (!powerComp.PowerOn && soundSustainer != null && !soundSustainer.Ended)
 		{
 			soundSustainer.End();
 		}
+
+		// Handle flickable component check
 		if (flickableComp != null && (flickableComp == null || !flickableComp.SwitchIsOn))
 		{
+			if (soundSustainer != null && !soundSustainer.Ended)
+			{
+				soundSustainer.End();
+			}
 			return;
 		}
+	}
+
+	// VTR method - handles less critical operations with delta timing
+	protected override void TickInterval(int delta)
+	{
+		base.TickInterval(delta);
+
+		// Reset the VTR tick counter
+		ticksSinceLastVTRUpdate = 0;
+
+		// Handle status changes that were flagged
+		if (needsStatusCheck)
+		{
+			needsStatusCheck = false;
+			needsPowerAdjustment = true;
+		}
+
+		// Handle different chamber statuses with delta-based logic
 		switch (ChamberStatus)
 		{
-		case ModdingStatus.Filling:
-			handleFillingTick();
-			return;
-		case ModdingStatus.Modding:
-			handleModdingTick();
-			return;
-		case ModdingStatus.Finished:
-			handleFinalTick();
-			return;
+			case ModdingStatus.Filling:
+				handleFillingTickVTR(delta);
+				return;
+			case ModdingStatus.Modding:
+				handleModdingTickVTR(delta);
+				return;
+			case ModdingStatus.Finished:
+				handleFinalTickVTR();
+				return;
 		}
+
+		// End sound sustainer if not in active state
 		if (soundSustainer != null && !soundSustainer.Ended)
 		{
 			soundSustainer.End();
 		}
 	}
 
-	public void handleFillingTick()
+	private void handleFillingTickVTR(int delta)
 	{
-		if (powerComp.PowerOn && Current.Game.tickManager.TicksGame % 300 == 0)
+		// Visual effects - scaled by delta but capped for performance
+		if (powerComp.PowerOn)
 		{
-			FleckMaker.ThrowSmoke(base.Position.ToVector3(), base.Map, 1f);
+			int effectTicks = Math.Min(delta, 10); // Cap effects to prevent spam
+			for (int i = 0; i < effectTicks; i++)
+			{
+				if ((Current.Game.tickManager.TicksGame + i) % 300 == 0)
+				{
+					FleckMaker.ThrowSmoke(base.Position.ToVector3(), base.Map, 1f);
+				}
+			}
 		}
+
+		// Check pending requests less frequently than every tick
 		IEnumerable<ThingOrderRequest> enumerable = orderProcessor.PendingRequests();
 		bool flag = enumerable == null;
 		if (!flag && enumerable.Count() == 0)
@@ -670,26 +868,40 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 		if (flag)
 		{
 			ChamberStatus = ModdingStatus.Modding;
+			needsStatusCheck = true;
 		}
 	}
 
-	public void handleModdingTick()
+	private void handleModdingTickVTR(int delta)
 	{
 		if (!powerComp.PowerOn)
 		{
 			return;
 		}
-		if (Current.Game.tickManager.TicksGame % 100 == 0)
+
+		// Visual effects - scaled by delta but controlled
+		int smokeTicks = Math.Min(delta / 2, 5); // Reduce smoke frequency
+		for (int i = 0; i < smokeTicks; i++)
 		{
-			FleckMaker.ThrowSmoke(base.Position.ToVector3(), base.Map, 1.33f);
-		}
-		if (Current.Game.tickManager.TicksGame % 250 == 0)
-		{
-			for (int i = 0; i < 3; i++)
+			if ((Current.Game.tickManager.TicksGame + i * 2) % 100 == 0)
 			{
-				FleckMaker.ThrowMicroSparks(base.Position.ToVector3() + new Vector3(Rand.Range(-1, 1), 0f, Rand.Range(-1, 1)), base.Map);
+				FleckMaker.ThrowSmoke(base.Position.ToVector3(), base.Map, 1.33f);
 			}
 		}
+
+		int sparkTicks = Math.Min(delta / 4, 3); // Reduce spark frequency
+		for (int i = 0; i < sparkTicks; i++)
+		{
+			if ((Current.Game.tickManager.TicksGame + i * 4) % 250 == 0)
+			{
+				for (int j = 0; j < 3; j++)
+				{
+					FleckMaker.ThrowMicroSparks(base.Position.ToVector3() + new Vector3(Rand.Range(-1, 1), 0f, Rand.Range(-1, 1)), base.Map);
+				}
+			}
+		}
+
+		// Handle sound sustainer
 		if (soundSustainer == null || soundSustainer.Ended)
 		{
 			SoundDef craftingSound = conversionProperties.craftingSound;
@@ -703,10 +915,14 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 		{
 			soundSustainer.Maintain();
 		}
-		nextResourceTick--;
+
+		// Process resources - scale by delta
+		nextResourceTick -= delta;
 		if (nextResourceTick <= 0)
 		{
 			nextResourceTick = conversionProperties.resourceTick;
+
+			// Process resource consumption
 			foreach (ThingOrderRequest thingOrderRequest in orderProcessor.requestedItems)
 			{
 				if (thingOrderRequest.nutrition)
@@ -754,23 +970,48 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				}
 			}
 		}
+
+		// Progress tracking - scale by delta
 		if (remainingTickTracker > 0)
 		{
-			remainingTickTracker--;
+			remainingTickTracker -= delta;
+			if (remainingTickTracker <= 0)
+			{
+				ChamberStatus = ModdingStatus.Finished;
+				needsStatusCheck = true;
+			}
 		}
 		else
 		{
 			ChamberStatus = ModdingStatus.Finished;
+			needsStatusCheck = true;
 		}
 	}
 
-	public void handleFinalTick()
+	private void handleFinalTickVTR()
 	{
+		// Final processing only needs to happen once, not repeatedly
 		ingredients.ClearAndDestroyContents();
 		FilthMaker.TryMakeFilth(InteractionCell, base.Map, RimWorld.ThingDefOf.Filth_Slime, 5);
 		ChoiceLetter choiceLetter = ((!IsPawnAndroid()) ? LetterMaker.MakeLetter("AndroidModLetterLabel".Translate(currentPawn.Name.ToStringShort), "AndroidModLetterDescription".Translate(currentPawn.Name.ToStringFull), LetterDefOf.PositiveEvent, currentPawn) : LetterMaker.MakeLetter("AndroidConvertLetterLabel".Translate(currentPawn.Name.ToStringShort), "AndroidConvertLetterDescription".Translate(currentPawn.Name.ToStringFull), LetterDefOf.PositiveEvent, currentPawn));
 		Find.LetterStack.ReceiveLetter(choiceLetter);
 		CompleteConversion();
+	}
+
+	// Legacy methods kept for compatibility - these now call VTR versions
+	public void handleFillingTick()
+	{
+		handleFillingTickVTR(1);
+	}
+
+	public void handleModdingTick()
+	{
+		handleModdingTickVTR(1);
+	}
+
+	public void handleFinalTick()
+	{
+		handleFinalTickVTR();
 	}
 
 	public float CountNutrition()
