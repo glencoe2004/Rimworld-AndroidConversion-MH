@@ -72,7 +72,6 @@
     <Compile Include="AndroidConversion\GlenMod_AndroidValueStatPartcs.cs" />
     <Compile Include="AndroidConversion\GlenMod_AndroidConversionDefOf.cs" />
     <Compile Include="AndroidConversion\GlenMod_Hediff_MechaniteHive.cs" />
-    <Compile Include="AndroidConversion\GlenMod_Hediff_VanometricCell.cs" />
     <Compile Include="AndroidConversion\GlenMod_ITab_ConversionChamber.cs" />
     <Compile Include="AndroidConversion\GlenMod_RaceUtility.cs" />
     <Compile Include="AndroidConversion\GlenMod_HediffApplication.cs" />

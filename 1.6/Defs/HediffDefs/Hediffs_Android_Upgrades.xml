@@ -375,7 +375,7 @@
 	<HediffDef ParentName="ChJAndroidUpgradeBase">
 		<defName>ChjAndroidUpgrade_ArchotechAIModule</defName>
 		<label>glitterworld module</label>
-		<description>Replaces the standard AI of the Android with a Glitterworld-made, peak-ultratech persona. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "Ascension complete."</description>
+		<description>Replaces the standard AI of the Android with a Glitterworld-made, peak-ultratech persona. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "I am a Culture Mind. We are close to gods, and on the far side."</description>
 		<defaultLabelColor>(0.8, 0.0, 0.8)</defaultLabelColor>
 		<stages>
 			<li>

@@ -31,10 +31,6 @@ Thumbs.db
 *.backup
 *~
 
-# RimWorld specific
-# Only ignore if you don't want to track these
-# *.sfv  # Uncomment if you don't want to track SFV files
-
 # Package/zip files (if you create releases)
 *.zip
 *.rar

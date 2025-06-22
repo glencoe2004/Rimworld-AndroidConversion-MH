@@ -29,8 +29,8 @@
 
 	<AndroidConversion.AndroidUpgradeDef>
 		<defName>Upgrade_ArchotechAIModule</defName>
-		<label>Archotech Module</label>
-		<description>Replaces the standard AI of the Android with a Archotech one. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "Ascension complete."</description>
+		<label>Glitterworld Module</label>
+		<description>Replaces the standard AI of the Android with a Glitterworld-made, peak-ultratech persona. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "I am a Culture Mind. We are close to gods, and on the far side."</description>
 		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
 		<iconTexturePath>Icons/Upgrades/angel-wings</iconTexturePath>
 		<orderID>1</orderID>
@@ -79,8 +79,8 @@
 
 	<AndroidConversion.AndroidModDef>
 		<defName>Mod_ArchotechAIModule</defName>
-		<label>Archotech Module</label>
-		<description>Replaces the standard AI of the Android with a Archotech one. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "Ascension complete."</description>
+		<label>Glitterworld Module</label>
+		<description>Replaces the standard AI of the Android with a Glitterworld-made, peak-ultratech persona. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "I am a Culture Mind. We are close to gods, and on the far side."</description>
 		<modType>AndroidConversion.ModCommand_Hediff</modType>
 		<iconTexturePath>Icons/Upgrades/angel-wings</iconTexturePath>
 		<orderID>1</orderID>
