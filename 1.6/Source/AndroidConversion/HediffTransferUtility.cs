@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using RimWorld;
 using Verse;
 
@@ -54,7 +55,7 @@ namespace AndroidConversion
             { "Toe", "ATR_MechanicalFoot" }
         };
 
-        public static List<HediffTransferData> PrepareHediffTransfer(Pawn pawn)
+        public static List<HediffSnapshot> PrepareHediffTransfer(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null)
             {
@@ -82,8 +83,8 @@ namespace AndroidConversion
 
             Log.Message($"Found {hediffsToTransfer.Count} hediffs with body parts to potentially transfer");
 
-            // Store hediff data for transfer
-            List<HediffTransferData> transferData = new List<HediffTransferData>();
+            // Store complete hediff snapshots
+            List<HediffSnapshot> snapshots = new List<HediffSnapshot>();
 
             foreach (Hediff hediff in hediffsToTransfer)
             {
@@ -92,18 +93,12 @@ namespace AndroidConversion
                     string targetBodyPartDef = GetAndroidBodyPartMapping(hediff.Part);
                     if (!string.IsNullOrEmpty(targetBodyPartDef))
                     {
-                        transferData.Add(new HediffTransferData
+                        HediffSnapshot snapshot = CreateHediffSnapshot(hediff, targetBodyPartDef);
+                        if (snapshot != null)
                         {
-                            HediffDef = hediff.def,
-                            Severity = hediff.Severity,
-                            SourceBodyPartLabel = hediff.Part.Label,
-                            TargetBodyPartDef = targetBodyPartDef,
-                            IsPermanent = hediff.IsPermanent(),
-                            SourceDef = hediff.sourceDef,
-                            SourceLabel = hediff.sourceLabel
-                        });
-
-                        Log.Message($"Queued transfer: {hediff.def.defName} from {hediff.Part.Label} to {targetBodyPartDef}");
+                            snapshots.Add(snapshot);
+                            Log.Message($"Captured complete snapshot: {hediff.def.defName} from {hediff.Part.Label} to {targetBodyPartDef}");
+                        }
                     }
                     else
                     {
@@ -129,51 +124,155 @@ namespace AndroidConversion
                 }
             }
 
-            return transferData;
+            return snapshots;
         }
 
-        public static void ApplyTransferredHediffs(Pawn pawn, List<HediffTransferData> transferData)
+        private static HediffSnapshot CreateHediffSnapshot(Hediff hediff, string targetBodyPartDef)
         {
-            if (transferData == null || transferData.Count == 0)
+            try
+            {
+                HediffSnapshot snapshot = new HediffSnapshot
+                {
+                    HediffType = hediff.GetType(),
+                    HediffDef = hediff.def,
+                    SourceBodyPartLabel = hediff.Part.Label,
+                    TargetBodyPartDef = targetBodyPartDef,
+                    FieldValues = new Dictionary<string, object>()
+                };
+
+                // Get all fields using reflection
+                FieldInfo[] fields = hediff.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+                foreach (FieldInfo field in fields)
+                {
+                    try
+                    {
+                        // Skip fields we'll recalculate
+                        if (ShouldSkipField(field.Name))
+                            continue;
+
+                        object value = field.GetValue(hediff);
+
+                        // Handle special cases for complex objects
+                        if (value != null && ShouldCopyValue(value))
+                        {
+                            snapshot.FieldValues[field.Name] = value;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning($"Could not copy field {field.Name} from hediff {hediff.def.defName}: {ex.Message}");
+                    }
+                }
+
+                return snapshot;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Failed to create snapshot for hediff {hediff.def.defName}: {ex.Message}");
+                return null;
+            }
+        }
+
+        private static bool ShouldSkipField(string fieldName)
+        {
+            // Fields that should be recalculated on the new pawn
+            return fieldName == "loadID" ||
+                   fieldName == "part" ||  // Skip the backing field for Part property
+                   fieldName == "pawn" ||
+                   fieldName == "def" ||   // We set this manually
+                   fieldName == "comps";  // Comps will be regenerated
+        }
+
+        private static bool ShouldCopyValue(object value)
+        {
+            Type valueType = value.GetType();
+
+            // Copy primitives, strings, enums
+            if (valueType.IsPrimitive || valueType == typeof(string) || valueType.IsEnum)
+                return true;
+
+            // Copy Defs (they're static references)
+            if (typeof(Def).IsAssignableFrom(valueType))
+                return true;
+
+            // Copy simple value types
+            if (valueType.IsValueType)
+                return true;
+
+            // Skip complex reference types that might cause issues
+            // (like pawn references, comp lists, etc.)
+            return false;
+        }
+
+        public static void ApplyTransferredHediffs(Pawn pawn, List<HediffSnapshot> snapshots)
+        {
+            if (snapshots == null || snapshots.Count == 0)
             {
                 return;
             }
 
-            Log.Message($"Applying {transferData.Count} transferred hediffs to {pawn.Name}");
+            Log.Message($"Applying {snapshots.Count} transferred hediff snapshots to {pawn.Name}");
 
-            foreach (HediffTransferData data in transferData)
+            foreach (HediffSnapshot snapshot in snapshots)
             {
                 try
                 {
-                    BodyPartRecord targetPart = FindAndroidBodyPart(pawn, data.TargetBodyPartDef, data.SourceBodyPartLabel);
+                    BodyPartRecord targetPart = FindAndroidBodyPart(pawn, snapshot.TargetBodyPartDef, snapshot.SourceBodyPartLabel);
 
                     if (targetPart != null)
                     {
-                        Hediff newHediff = HediffMaker.MakeHediff(data.HediffDef, pawn, targetPart);
-                        newHediff.Severity = data.Severity;
+                        Hediff newHediff = (Hediff)Activator.CreateInstance(snapshot.HediffType);
 
-                        // Preserve source information if applicable
-                        if (data.SourceDef != null)
+                        // Set pawn and def first, then part
+                        newHediff.pawn = pawn;
+                        newHediff.def = snapshot.HediffDef;
+                        newHediff.Part = targetPart;
+
+                        // Copy all the stored field values
+                        RestoreHediffFields(newHediff, snapshot.FieldValues);
+
+                        // Ensure Part is still set correctly after field restoration
+                        if (newHediff.Part == null)
                         {
-                            newHediff.sourceDef = data.SourceDef;
-                        }
-                        if (!string.IsNullOrEmpty(data.SourceLabel))
-                        {
-                            newHediff.sourceLabel = data.SourceLabel;
+                            newHediff.Part = targetPart;
+                            Log.Warning($"Had to re-set Part for {snapshot.HediffDef.defName} after field restoration");
                         }
 
+                        // Add to pawn's health
                         pawn.health.AddHediff(newHediff);
 
-                        Log.Message($"Successfully transferred {data.HediffDef.defName} to {targetPart.Label}");
+                        Log.Message($"Successfully transferred {snapshot.HediffDef.defName} to {targetPart.Label}");
                     }
                     else
                     {
-                        Log.Warning($"Could not find target body part {data.TargetBodyPartDef} for hediff {data.HediffDef.defName}");
+                        Log.Warning($"Could not find target body part {snapshot.TargetBodyPartDef} for hediff {snapshot.HediffDef.defName}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Failed to apply transferred hediff {data.HediffDef.defName}: {ex.Message}");
+                    Log.Error($"Failed to apply transferred hediff {snapshot.HediffDef.defName}: {ex.Message}");
+                }
+            }
+        }
+
+        private static void RestoreHediffFields(Hediff hediff, Dictionary<string, object> fieldValues)
+        {
+            Type hediffType = hediff.GetType();
+
+            foreach (var kvp in fieldValues)
+            {
+                try
+                {
+                    FieldInfo field = hediffType.GetField(kvp.Key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (field != null && !field.IsInitOnly && !field.IsLiteral)
+                    {
+                        field.SetValue(hediff, kvp.Value);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning($"Could not restore field {kvp.Key} on hediff {hediff.def.defName}: {ex.Message}");
                 }
             }
         }
@@ -199,13 +298,6 @@ namespace AndroidConversion
         {
             if (pawn?.RaceProps?.body?.AllParts == null)
                 return null;
-
-            // Debug: Log all available body parts
-            Log.Message($"DEBUG: Available body parts for {pawn.def.defName}:");
-            foreach (BodyPartRecord part in pawn.RaceProps.body.AllParts)
-            {
-                Log.Message($"  - {part.def.defName} ({part.Label})");
-            }
 
             Log.Message($"Looking for target part: {targetDefName} (from original: {originalLabel})");
 
@@ -262,15 +354,13 @@ namespace AndroidConversion
             return null;
         }
 
-        public class HediffTransferData
+        public class HediffSnapshot
         {
+            public Type HediffType;
             public HediffDef HediffDef;
-            public float Severity;
             public string SourceBodyPartLabel;
             public string TargetBodyPartDef;
-            public bool IsPermanent;
-            public ThingDef SourceDef;
-            public string SourceLabel;
+            public Dictionary<string, object> FieldValues;
         }
     }
 }

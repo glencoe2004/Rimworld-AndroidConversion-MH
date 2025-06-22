@@ -266,11 +266,11 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			// Determine if this is a human to android conversion (for hediff transfer)
 			bool isHumanToAndroid = currentPawn.IsHuman() && (HumanToTX3 || TX3ToTX4);
 
-			// Store hediff data BEFORE race change (while we still have human body structure)
-			List<HediffTransferUtility.HediffTransferData> hediffTransferData = null;
+			// Store hediff snapshots BEFORE race change (while we still have human body structure)
+			List<HediffTransferUtility.HediffSnapshot> hediffSnapshots = null;
 			if (isHumanToAndroid)
 			{
-				hediffTransferData = HediffTransferUtility.PrepareHediffTransfer(currentPawn);
+				hediffSnapshots = HediffTransferUtility.PrepareHediffTransfer(currentPawn);
 			}
 
 			// CRITICAL: Change race definition PROPERLY
@@ -334,13 +334,13 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				AndroidUtility.AddAndroidHediff(currentPawn);
 			}
 
-			// Apply transferred hediffs AFTER race change is complete
-			if (isHumanToAndroid && hediffTransferData != null)
+			// Apply transferred hediff snapshots AFTER race change is complete
+			if (isHumanToAndroid && hediffSnapshots != null)
 			{
-				HediffTransferUtility.ApplyTransferredHediffs(currentPawn, hediffTransferData);
+				HediffTransferUtility.ApplyTransferredHediffs(currentPawn, hediffSnapshots);
 			}
 
-			// Apply saved modifications AFTER android hediff
+			// Apply saved modifications AFTER android hediff and transfers
 			foreach (ModCommand modCommand in savedChanges)
 			{
 				try
