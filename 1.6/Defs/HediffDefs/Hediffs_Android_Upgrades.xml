@@ -324,9 +324,10 @@
 		<label>vanometric cell</label>
 		<description>Miniature version of the Vanometric Powercell. When installed it frees the Android of the need for both energy and food. Truly the ultimate upgrade.\n-- "Power Overwhelming."</description>
 		<defaultLabelColor>(0.8, 0.0, 0.8)</defaultLabelColor>
-		<hediffClass>AndroidConversion.Hediff_VanometricCell</hediffClass>
 		<stages>
-			<li />
+			<li>
+				<hungerRateFactor>0</hungerRateFactor>
+			</li>
 		</stages>
 		<modExtensions>
 			<li Class="AndroidConversion.AndroidUpgradeHediffProperties">
