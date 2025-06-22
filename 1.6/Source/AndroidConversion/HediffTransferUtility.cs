@@ -55,6 +55,17 @@ namespace AndroidConversion
             { "Toe", "ATR_MechanicalFoot" }
         };
 
+        // OPTIMIZATION: Cache for reflection results to avoid repeated reflection calls
+        private static readonly Dictionary<Type, FieldInfo[]> TypeFieldCache = new Dictionary<Type, FieldInfo[]>();
+        private static readonly Dictionary<Type, Dictionary<string, FieldInfo>> TypeFieldLookupCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
+        private static readonly Dictionary<string, bool> SkipFieldCache = new Dictionary<string, bool>();
+        private static readonly Dictionary<Type, bool> CopyableTypeCache = new Dictionary<Type, bool>();
+
+        // OPTIMIZATION: Pre-compiled field skip rules for faster checking
+        private static readonly HashSet<string> SkippedFieldNames = new HashSet<string>
+        {
+            "loadID", "part", "pawn", "def", "comps"
+        };
 
         public static List<HediffSnapshot> PrepareHediffTransfer(Pawn pawn)
         {
@@ -128,9 +139,7 @@ namespace AndroidConversion
             return snapshots;
         }
 
-        // Cache for reflection results to avoid repeated reflection calls
-        private static readonly Dictionary<Type, FieldInfo[]> TypeFieldCache = new Dictionary<Type, FieldInfo[]>();
-
+        // OPTIMIZATION: Get cached fields with lookup dictionary for O(1) access
         private static FieldInfo[] GetCachedFields(Type type)
         {
             if (!TypeFieldCache.TryGetValue(type, out FieldInfo[] fields))
@@ -139,6 +148,18 @@ namespace AndroidConversion
                 TypeFieldCache[type] = fields;
             }
             return fields;
+        }
+
+        // OPTIMIZATION: Get cached field lookup dictionary for O(1) field access by name
+        private static Dictionary<string, FieldInfo> GetCachedFieldLookup(Type type)
+        {
+            if (!TypeFieldLookupCache.TryGetValue(type, out Dictionary<string, FieldInfo> lookup))
+            {
+                FieldInfo[] fields = GetCachedFields(type);
+                lookup = fields.ToDictionary(f => f.Name, f => f);
+                TypeFieldLookupCache[type] = lookup;
+            }
+            return lookup;
         }
 
         private static HediffSnapshot CreateHediffSnapshot(Hediff hediff, string targetBodyPartDef)
@@ -154,21 +175,21 @@ namespace AndroidConversion
                     FieldValues = new Dictionary<string, object>()
                 };
 
-                // Use cached fields instead of reflection on every call
+                // OPTIMIZATION: Use cached fields instead of reflection on every call
                 FieldInfo[] fields = GetCachedFields(hediff.GetType());
 
                 foreach (FieldInfo field in fields)
                 {
                     try
                     {
-                        // Skip fields we'll recalculate
-                        if (ShouldSkipField(field.Name))
+                        // OPTIMIZATION: Use cached skip check
+                        if (ShouldSkipFieldCached(field.Name))
                             continue;
 
                         object value = field.GetValue(hediff);
 
                         // Handle special cases for complex objects
-                        if (value != null && ShouldCopyValue(value))
+                        if (value != null && ShouldCopyValueCached(value))
                         {
                             snapshot.FieldValues[field.Name] = value;
                         }
@@ -188,20 +209,34 @@ namespace AndroidConversion
             }
         }
 
-        private static bool ShouldSkipField(string fieldName)
+        // OPTIMIZATION: Cached field skip check using HashSet for O(1) lookup
+        private static bool ShouldSkipFieldCached(string fieldName)
         {
-            // Fields that should be recalculated on the new pawn
-            return fieldName == "loadID" ||
-                   fieldName == "part" ||  // Skip the backing field for Part property
-                   fieldName == "pawn" ||
-                   fieldName == "def" ||   // We set this manually
-                   fieldName == "comps";  // Comps will be regenerated
+            if (!SkipFieldCache.TryGetValue(fieldName, out bool shouldSkip))
+            {
+                shouldSkip = SkippedFieldNames.Contains(fieldName);
+                SkipFieldCache[fieldName] = shouldSkip;
+            }
+            return shouldSkip;
         }
 
-        private static bool ShouldCopyValue(object value)
+        // OPTIMIZATION: Cached type checking for copyable values
+        private static bool ShouldCopyValueCached(object value)
         {
             Type valueType = value.GetType();
 
+            if (!CopyableTypeCache.TryGetValue(valueType, out bool shouldCopy))
+            {
+                shouldCopy = DetermineCopyability(valueType);
+                CopyableTypeCache[valueType] = shouldCopy;
+            }
+
+            return shouldCopy;
+        }
+
+        // OPTIMIZATION: Separate method for type copyability determination to keep cache logic clean
+        private static bool DetermineCopyability(Type valueType)
+        {
             // Copy primitives, strings, enums
             if (valueType.IsPrimitive || valueType == typeof(string) || valueType.IsEnum)
                 return true;
@@ -274,11 +309,8 @@ namespace AndroidConversion
         {
             Type hediffType = hediff.GetType();
 
-            // Use cached fields instead of reflection on every call
-            FieldInfo[] fields = GetCachedFields(hediffType);
-
-            // Create a lookup dictionary for faster field access
-            Dictionary<string, FieldInfo> fieldLookup = fields.ToDictionary(f => f.Name, f => f);
+            // OPTIMIZATION: Use cached field lookup instead of reflection on every call
+            Dictionary<string, FieldInfo> fieldLookup = GetCachedFieldLookup(hediffType);
 
             foreach (var kvp in fieldValues)
             {
@@ -314,7 +346,9 @@ namespace AndroidConversion
             return null;
         }
 
+        // OPTIMIZATION: Cache for body part def lookups and pawn body parts
         private static readonly Dictionary<string, BodyPartDef> BodyPartDefCache = new Dictionary<string, BodyPartDef>();
+        private static readonly Dictionary<Pawn, List<BodyPartRecord>> PawnBodyPartsCache = new Dictionary<Pawn, List<BodyPartRecord>>();
 
         private static BodyPartRecord FindAndroidBodyPart(Pawn pawn, string targetDefName, string originalLabel)
         {
@@ -323,8 +357,13 @@ namespace AndroidConversion
 
             Log.Message($"Looking for target part: {targetDefName} (from original: {originalLabel})");
 
-            // Cache the body parts for this pawn's race to avoid repeated access
-            var allParts = pawn.RaceProps.body.AllParts;
+            // OPTIMIZATION: Cache the body parts for this pawn's race to avoid repeated access
+            List<BodyPartRecord> allParts;
+            if (!PawnBodyPartsCache.TryGetValue(pawn, out allParts))
+            {
+                allParts = pawn.RaceProps.body.AllParts.ToList();
+                PawnBodyPartsCache[pawn] = allParts;
+            }
 
             // First, try to find exact match with similar labeling
             foreach (BodyPartRecord part in allParts)
@@ -377,6 +416,25 @@ namespace AndroidConversion
 
             Log.Warning($"No match found for {targetDefName} (original: {originalLabel})");
             return null;
+        }
+
+        // OPTIMIZATION: Clear caches when appropriate to prevent memory leaks
+        public static void ClearCaches()
+        {
+            PawnBodyPartsCache.Clear();
+            Log.Message("HediffTransferUtility: Cleared pawn body parts cache");
+        }
+
+        // Call this on map change or when memory usage gets high
+        public static void ClearAllCaches()
+        {
+            TypeFieldCache.Clear();
+            TypeFieldLookupCache.Clear();
+            SkipFieldCache.Clear();
+            CopyableTypeCache.Clear();
+            PawnBodyPartsCache.Clear();
+            BodyPartDefCache.Clear();
+            Log.Message("HediffTransferUtility: Cleared all caches");
         }
 
         public class HediffSnapshot
