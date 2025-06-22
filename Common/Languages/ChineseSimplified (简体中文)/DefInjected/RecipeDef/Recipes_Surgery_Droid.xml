@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <ChJAndroidShutDownDroid.label>關機</ChJAndroidShutDownDroid.label>
+  <ChJAndroidShutDownDroid.description>將機器人關機</ChJAndroidShutDownDroid.description>
+  <ChJAndroidShutDownDroid.jobString>機器人關機中</ChJAndroidShutDownDroid.jobString>
+
+  <ChJAndroidRepairKit.label>使用機器人維修包</ChJAndroidRepairKit.label>
+  <ChJAndroidRepairKit.description>使用維修包來讓機器人復原到最初始的狀態，也會順便補充冷卻液</ChJAndroidRepairKit.description>
+  <ChJAndroidRepairKit.jobString>機器人維修包使用中</ChJAndroidRepairKit.jobString>
+
+
+</LanguageData>

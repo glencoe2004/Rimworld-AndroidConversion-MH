@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <ChJAndroidShutDownDroid.label>выключить и разобрать</ChJAndroidShutDownDroid.label>
+  <ChJAndroidShutDownDroid.description>Выключить дроида и разобрать его на материалы.</ChJAndroidShutDownDroid.description>
+  <ChJAndroidShutDownDroid.jobString>выключает и разбирает дроида</ChJAndroidShutDownDroid.jobString>
+
+  <ChJAndroidRepairKit.label>использовать ремонтный комплект</ChJAndroidRepairKit.label>
+  <ChJAndroidRepairKit.description>Использовать ремонтный комплект, чтобы полностью восстановить состояние дроида: от изношенных частей тела, до потерянных конечностей. Также перезаправляет хладагент и у дроида, и у Андроида.</ChJAndroidRepairKit.description>
+  <ChJAndroidRepairKit.jobString>использует ремонтный комплект</ChJAndroidRepairKit.jobString>
+
+</LanguageData>

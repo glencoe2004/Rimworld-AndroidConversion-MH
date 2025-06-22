@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<!-- Archotech -->
+	<AndroidConversion.AndroidUpgradeGroupDef>
+		<defName>Archotech</defName>
+		<label>Archotech</label>
+		<orderID>400</orderID>
+	</AndroidConversion.AndroidUpgradeGroupDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_TechprofAIModule</defName>
+		<label>Techprof Module</label>
+		<description>Installs a secondary AI which greatly increases the research capabilities of the Android.\n-- "Two brains is better than one."</description>
+		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
+		<iconTexturePath>Icons/Upgrades/processor</iconTexturePath>
+		<orderID>0</orderID>
+		<upgradeGroup>Archotech</upgradeGroup>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<TechprofSubpersonaCore>1</TechprofSubpersonaCore>
+		</costList>
+		<costsNotAffectedByBodySize>
+			<li>TechprofSubpersonaCore</li>
+		</costsNotAffectedByBodySize>
+		<hediffToApply>ChjAndroidUpgrade_TechprofAIModule</hediffToApply>
+		<extraPrintingTime>20000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Archotech</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_ArchotechAIModule</defName>
+		<label>Archotech Module</label>
+		<description>Replaces the standard AI of the Android with a Archotech one. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "Ascension complete."</description>
+		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
+		<iconTexturePath>Icons/Upgrades/angel-wings</iconTexturePath>
+		<orderID>1</orderID>
+		<upgradeGroup>Archotech</upgradeGroup>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<AIPersonaCore>1</AIPersonaCore>
+		</costList>
+		<costsNotAffectedByBodySize>
+			<li>AIPersonaCore</li>
+		</costsNotAffectedByBodySize>
+		<hediffToApply>ChjAndroidUpgrade_ArchotechAIModule</hediffToApply>
+		<extraPrintingTime>120000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Archotech</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+
+	<!-- Archotech -->
+	<AndroidConversion.AndroidModGroupDef>
+		<defName>Archotech</defName>
+		<label>Archotech</label>
+		<orderID>400</orderID>
+		<physical>false</physical>
+	</AndroidConversion.AndroidModGroupDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Mod_TechprofAIModule</defName>
+		<label>Techprof Module</label>
+		<description>Installs a secondary AI which greatly increases the research capabilities of the Android.\n-- "Two brains is better than one."</description>
+		<modType>AndroidConversion.ModCommand_Hediff</modType>
+		<iconTexturePath>Icons/Upgrades/processor</iconTexturePath>
+		<orderID>0</orderID>
+		<modGroup>Archotech</modGroup>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<TechprofSubpersonaCore>1</TechprofSubpersonaCore>
+		</costList>
+		<costsNotAffectedByBodySize>
+			<li>TechprofSubpersonaCore</li>
+		</costsNotAffectedByBodySize>
+		<hediffToApply>ChjAndroidUpgrade_TechprofAIModule</hediffToApply>
+		<extraPrintingTime>20000</extraPrintingTime>
+		<removalPrintingTime>20000</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Archotech</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Mod_ArchotechAIModule</defName>
+		<label>Archotech Module</label>
+		<description>Replaces the standard AI of the Android with a Archotech one. Considered dangerous by many this can be a boon though. With superior intellectual capabilities everything seem to come natural to the Android with this brain.\n-- "Ascension complete."</description>
+		<modType>AndroidConversion.ModCommand_Hediff</modType>
+		<iconTexturePath>Icons/Upgrades/angel-wings</iconTexturePath>
+		<orderID>1</orderID>
+		<modGroup>Archotech</modGroup>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<AIPersonaCore>1</AIPersonaCore>
+		</costList>
+		<costsNotAffectedByBodySize>
+			<li>AIPersonaCore</li>
+		</costsNotAffectedByBodySize>
+		<hediffToApply>ChjAndroidUpgrade_ArchotechAIModule</hediffToApply>
+		<extraPrintingTime>120000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Archotech</requiredResearch>
+		<enabled>true</enabled>
+		<removable>false</removable>
+	</AndroidConversion.AndroidModDef>
+</Defs>

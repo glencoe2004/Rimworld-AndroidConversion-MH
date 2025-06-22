@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<!-- Core -->
+	<HediffDef ParentName="ChJAndroidUpgradeBase">
+		<defName>ChjAndroidUpgrade_DroneCore</defName>
+		<label>drone mentality</label>
+		<description>Is no better than a Droid mentally, but they get the benefits of an Android.</description>
+		<defaultLabelColor>(0.78, 0.74, 0.9)</defaultLabelColor>
+		<stages>
+			<li>
+				<statOffsets>
+					<SocialImpact>-0.9</SocialImpact>
+					<GlobalLearningFactor>-0.9</GlobalLearningFactor>
+				</statOffsets>
+			</li>
+		</stages>
+	</HediffDef>
+	
+</Defs>

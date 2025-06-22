@@ -1,0 +1,55 @@
+# Visual Studio / IDE files
+.vs/
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+*.csproj.user
+
+# Build outputs
+bin/
+obj/
+*.exe
+
+# Temporary and cache files
+*.tmp
+*.temp
+*.cache
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# RimWorld specific
+# Only ignore if you don't want to track these
+# *.sfv  # Uncomment if you don't want to track SFV files
+
+# Package/zip files (if you create releases)
+*.zip
+*.rar
+*.7z
+
+# Development tools output
+*.orig
+*.rej
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Dependencies that should be downloaded fresh
+packages/

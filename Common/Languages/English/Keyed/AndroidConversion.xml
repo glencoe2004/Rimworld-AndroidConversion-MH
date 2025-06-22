@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<ConversionMenuTitle>Android Conversion Menu</ConversionMenuTitle>
+	<AndroidPhysicsMods>Physical Modifications</AndroidPhysicsMods>
+	<AndroidMentalMods>Mental Modifications</AndroidMentalMods>
+	<AndroidConversionCostLabel>Resources Required</AndroidConversionCostLabel>
+	<AndroidConversionTimeCost>Time Required</AndroidConversionTimeCost>
+	<AndroidConversionStart>Finalize</AndroidConversionStart>
+	<AndroidConversionCancel>Cancel</AndroidConversionCancel>
+	<TabConversionChamberContents>Chamber</TabConversionChamberContents>
+	
+	<AndroidGizmoInitModLabel>Mod Android</AndroidGizmoInitModLabel>
+	<AndroidGizmoInitModDescription>Initiates the modding process.</AndroidGizmoInitModDescription>
+	<AndroidGizmoInitConvertLabel>Start Conversion</AndroidGizmoInitConvertLabel>
+	<AndroidGizmoInitConvertDescription>Initiates the conversion process.</AndroidGizmoInitConvertDescription>
+	
+	<AndroidGizmoAbortModLabel>Abort Modification</AndroidGizmoAbortModLabel>
+	<AndroidGizmoAbortModDescription>Aborts the modification process and ejects the current pawn.</AndroidGizmoAbortModDescription>
+	<AndroidGizmoAbortConvertLabel>Abort Conversion</AndroidGizmoAbortConvertLabel>
+	<AndroidGizmoAbortConvertDescription>Aborts the conversion process and ejects the current pawn.</AndroidGizmoAbortConvertDescription>
+	
+	<AndroidConvertLetterLabel>{0} Converted</AndroidConvertLetterLabel>
+	<AndroidConvertLetterDescription>{0} has been converted!\n\nThey may take a while to get used to their new existance as an android.</AndroidConvertLetterDescription>
+	<AndroidModLetterLabel>{0} Modified</AndroidModLetterLabel>
+	<AndroidModLetterDescription>{0}'s modifications have been finished.\n\nThey may take a while to get used to their new capabilities.</AndroidModLetterDescription>
+	
+	<ConversionChamberGuestsNotAllowed>guests not allowed</ConversionChamberGuestsNotAllowed>
+	<EnterConversionChamber>Enter Conversion Chamber</EnterConversionChamber>
+	<CannotBeConverted>Pawn cannot be converted</CannotBeConverted>
+	
+	<AndroidModdingStatusEnum0>Waiting for Pawn</AndroidModdingStatusEnum0>
+	<AndroidModdingStatusEnum1>Idle</AndroidModdingStatusEnum1>
+	<AndroidModdingStatusEnum2>Filling</AndroidModdingStatusEnum2>
+	<AndroidModdingStatusEnum3>Working</AndroidModdingStatusEnum3>
+	<AndroidModdingStatusEnum4>Finished</AndroidModdingStatusEnum4>
+	<AndroidModdingStatus>Status: {0}</AndroidModdingStatus>
+	<AndroidModdingProgress>Progress: {0}</AndroidModdingProgress>
+</LanguageData>

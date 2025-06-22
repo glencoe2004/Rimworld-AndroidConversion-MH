@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <AndroidTab>Настройки</AndroidTab>
+  <AndroidTabTitle>Питательные компоненты</AndroidTabTitle>
+  <AndroidNutrition>Питательность</AndroidNutrition>
+  <AndroidPrinterStatus>Статус: {0}</AndroidPrinterStatus>
+  <AndroidPrinterAndroid>Андроид: {0}</AndroidPrinterAndroid>
+  <AndroidPrinterProgress>Статус процесса: {0}</AndroidPrinterProgress>
+  <AndroidPrinterNeed>Необходимо: {0} {1}.</AndroidPrinterNeed>
+  <AndroidPrinterMaterials>Материалы:</AndroidPrinterMaterials>
+  <AndroidPrinterStatusEnum0>в режиме ожидания</AndroidPrinterStatusEnum0>
+  <AndroidPrinterStatusEnum1>заполняется</AndroidPrinterStatusEnum1>
+  <AndroidPrinterStatusEnum2>печатает</AndroidPrinterStatusEnum2>
+  <AndroidPrinterStatusEnum3>завершено</AndroidPrinterStatusEnum3>
+
+  <AndroidDroidCrafterPawnNeedResearch>Производство {0} (Необходимо исследование: {1})</AndroidDroidCrafterPawnNeedResearch>
+  <AndroidDroidCrafterPawnMake>Производство {0}</AndroidDroidCrafterPawnMake>
+
+  <AndroidPrintedLetterLabel>Андроид {0} напечатан(а).</AndroidPrintedLetterLabel>
+  <AndroidPrintedLetterDescription>С Днём Рождения, {0}!\n\nБудучи новичками в этом состоянии "существования", Андроиды будут загипнотизированы красотой жизни и не будут переживать за неудачи и негативные ситуации долгое время.</AndroidPrintedLetterDescription>
+  <AndroidDroidManufactoryLetterLabel>{0} создан.</AndroidDroidManufactoryLetterLabel>
+  <AndroidDroidManufactoryLetterDescription>Приветствуем {0} в поселении.\n\nКак новую машину, вам следует запустить его в работу немедленно. Не забудьте про батареи, чтобы подзаряжать {0} в экстренных ситуациях.</AndroidDroidManufactoryLetterDescription>
+  <AndroidSpawnedPawnMessageText>{0} запустился</AndroidSpawnedPawnMessageText>
+  <AndroidSpawnedDroidMessageText>{1} собрал(а) {0} из дроид-комплекта.</AndroidSpawnedDroidMessageText>
+
+  <AndroidGizmoTogglePrintingStartLabel>запустить изготовление</AndroidGizmoTogglePrintingStartLabel>
+  <AndroidGizmoTogglePrintingStartDescription>Инициализировать процесс изготовления.</AndroidGizmoTogglePrintingStartDescription>
+  <AndroidGizmoTogglePrintingStopLabel>прекратить изготовление</AndroidGizmoTogglePrintingStopLabel>
+  <AndroidGizmoTogglePrintingStopDescription>Прервать процесс изготовления. Все потраченные материалы израсходуются впустую.</AndroidGizmoTogglePrintingStopDescription>
+  <AndroidGizmoPrinterAndroidInfoDescription>Информация о создаваемом объекте</AndroidGizmoPrinterAndroidInfoDescription>
+  <AndroidGizmoSelfDetonationLabel>Самоуничтожение</AndroidGizmoSelfDetonationLabel>
+  <AndroidGizmoSelfDetonationDescription>Перегреть источник питания, что вызовет детонацию. Обратного пути нет.\n\n"Во благо поселения!"</AndroidGizmoSelfDetonationDescription>
+  <AndroidGizmoAutoRefuelLabel>дозаправляться автоматически</AndroidGizmoAutoRefuelLabel>
+  <AndroidGizmoAutoRefuelDescription>Если включено, носитель будет автоматически перезаправлять своё снаряжение.</AndroidGizmoAutoRefuelDescription>
+  <AndroidGizmoRefuelNowLabel>дозаправить сейчас</AndroidGizmoRefuelNowLabel>
+  <AndroidGizmoRefuelNowDescription>Пополнить снаряжение топливом сейчас.</AndroidGizmoRefuelNowDescription>
+  <AndroidGizmoRechargeNowLabel>зарядиться сейчас</AndroidGizmoRechargeNowLabel>
+  <AndroidGizmoRechargeNowDescription>Пополнить запас энергии сейчас.</AndroidGizmoRechargeNowDescription>
+  <AndroidGizmoDetonateBlackBoxLabel>взорвать чёрный ящик</AndroidGizmoDetonateBlackBoxLabel>
+  <AndroidGizmoDetonateBlackBoxDescription>Превратить Андроида и его окружение в радиоактивный пепел. Будьте уверены, что делаете это в далеке от союзников и базы.</AndroidGizmoDetonateBlackBoxDescription>
+  <AndroidGizmoLoverMentalityLabel>задать любовника</AndroidGizmoLoverMentalityLabel>
+  <AndroidGizmoLoverMentalityDescription>Насильно задать новую цель для ухаживаний Андроида. Максимизирует привязанность на новую цель и стерает её со старой.</AndroidGizmoLoverMentalityDescription>
+  <AndroidGizmoRepeatPawnCraftingLabel>повторить производство</AndroidGizmoRepeatPawnCraftingLabel>
+  <AndroidGizmoRepeatPawnCraftingDescription>Когда изготовление завершится, последнее автоматически повторится с теми же параметрами.</AndroidGizmoRepeatPawnCraftingDescription>
+
+  <AndroidFuelEfficencyStatPartLabel>Эффективность</AndroidFuelEfficencyStatPartLabel>
+  <AndroidFuelEfficencyStatPartReport>Определяет КПД топливного генератора. В целом, более качественные генераторы работают лучше.\n\nЧем значение НИЖЕ, тем лучше.</AndroidFuelEfficencyStatPartReport>
+
+  <AndroidSelfDetonationConfirmationDialogText>Самоуничтожить {0}? Это необратимое действие.</AndroidSelfDetonationConfirmationDialogText>
+
+  <AndroidCustomization>Кастомизация</AndroidCustomization>
+  <AndroidCustomizationChangeColor>Изменить цвет</AndroidCustomizationChangeColor>
+  <AndroidCustomizationPrint>Напечатать</AndroidCustomizationPrint>
+  <AndroidCustomizationRerollSkills>Переизбрать навыки</AndroidCustomizationRerollSkills>
+  <AndroidCustomizationRollFemale>Roll Female</AndroidCustomizationRollFemale>
+  <AndroidCustomizationRollMale>Roll Male</AndroidCustomizationRollMale>
+  <AndroidNone>None</AndroidNone>
+  <AndroidCustomizationFirstIdentity>Детство:</AndroidCustomizationFirstIdentity>
+  <AndroidCustomizationSecondIdentity>Зрелость:</AndroidCustomizationSecondIdentity>
+  <AndroidCustomizationCost>Стоимость:</AndroidCustomizationCost>
+  <AndroidCustomizationCostLabel>Стоимость создания</AndroidCustomizationCostLabel>
+  <AndroidCustomizationTraitsLabel></AndroidCustomizationTraitsLabel>
+  <AndroidCustomizationAddTraitLabel>добавить черты характера...</AndroidCustomizationAddTraitLabel>
+  <AndroidCustomizationOriginalTraitFloatMenu>(Original Trait) {0}</AndroidCustomizationOriginalTraitFloatMenu>
+  <AndroidCustomizationUpgrades>Модули</AndroidCustomizationUpgrades>
+  <AndroidCustomizationTimeCost>Стоимость по времени</AndroidCustomizationTimeCost>
+  <AndroidCustomizationRequiredResearch>ТРЕБУЕТ ИССЛЕДОВАНИЯ</AndroidCustomizationRequiredResearch>
+  <AndroidCustomizationChangeBodyType>Изменяет форму тела.</AndroidCustomizationChangeBodyType>
+  <AndroidCustomizationChangeSkinColor>Изменяет цвет кожи.</AndroidCustomizationChangeSkinColor>
+
+  <AndroidHediffVanometricCell>Убирает потребность в еде и энергии.</AndroidHediffVanometricCell>
+  <AndroidMechaniteHive>Переодически залечивает повреждения и утечки хладагента.</AndroidMechaniteHive>
+  <AndroidHediffBlackBox>Создает огромный взрыв при смерти.</AndroidHediffBlackBox>
+
+  <AndroidMarketValueStatPartLabel>Добавленная стоимость от улучшений:</AndroidMarketValueStatPartLabel>
+
+  <AndroidConsumeEnergySource>Подзарядится от {0}</AndroidConsumeEnergySource>
+  <AndroidConsumeEnergySourceOther>Подзарядить {1}</AndroidConsumeEnergySourceOther>
+  <AndroidMachinelikeHibernate>Войти в спящий режим</AndroidMachinelikeHibernate>
+  <AndroidMachinelikeHibernateFail>{0} не может войти в спящий режим. Не способен.</AndroidMachinelikeHibernateFail>
+  <AndroidMachinelikeHibernateFailNoPower>{0} не может войти в спящий режим из-за отсутствия энергии.</AndroidMachinelikeHibernateFailNoPower>
+  <AndroidMachinelikeHibernateFailReserveOrReach>{0} не может использовать или добраться до {1}.</AndroidMachinelikeHibernateFailReserveOrReach>
+
+  <AndroidSettingsEyeGlow>Свечение глаз Андроидов (Facial Stuff Compatbility)</AndroidSettingsEyeGlow>
+  <AndroidSettingsExplodeOnDeath>(Ан)дроиды взрываются при смерти/перегреве</AndroidSettingsExplodeOnDeath>
+  <AndroidSettingsExplosionRadius>Радиус взрыва</AndroidSettingsExplosionRadius>
+  <AndroidSettingsDroidCompatibilityMode>Droid Compatibility Mode</AndroidSettingsDroidCompatibilityMode>
+  <AndroidSettingsDroidCompatibilityModeTooltip>All needs are turned back on to avoid NullReferenceException in mods taking that Needs are there for granted.</AndroidSettingsDroidCompatibilityModeTooltip>
+  <AndroidSettingsDroidDetonationDialog>Диалог подтверждения самоуничтожения</AndroidSettingsDroidDetonationDialog>
+  <AndroidSettingsDroidDetonationDialogTooltip>Если включено, то когда вы нажимаете кнопку самоуничтожения на дроидах, вызывается диалоговое окно, которое запрашивает подтверждение.</AndroidSettingsDroidDetonationDialogTooltip>
+  <AndroidSettingsDroidWearDown>Включить износ дроидов</AndroidSettingsDroidWearDown>
+  <AndroidSettingsDroidWearDownQuadrum>Take a quadrum for weardown check</AndroidSettingsDroidWearDownQuadrum>
+
+</LanguageData>

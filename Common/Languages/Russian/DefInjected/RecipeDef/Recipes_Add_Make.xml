@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <Make_ChJAndroidThermalBandages.label>сделать термальную упаковку</Make_ChJAndroidThermalBandages.label>
+  <Make_ChJAndroidThermalBandages.description>Сделать термальную упаковку.</Make_ChJAndroidThermalBandages.description>
+  <Make_ChJAndroidThermalBandages.jobString>делает термальную упаковку</Make_ChJAndroidThermalBandages.jobString>
+
+  <Make_ChjAndroidMaidOutfit.label>сшить костюм горничной</Make_ChjAndroidMaidOutfit.label>
+  <Make_ChjAndroidMaidOutfit.description>Сшить костюм горничной.</Make_ChjAndroidMaidOutfit.description>
+  <Make_ChjAndroidMaidOutfit.jobString>шьёт костюм горничной</Make_ChjAndroidMaidOutfit.jobString>
+
+  <Make_ChjAndroidMaidBattleDress.label>изготовить боевой костюм горничной</Make_ChjAndroidMaidBattleDress.label>
+  <Make_ChjAndroidMaidBattleDress.description>Изготовить боевой костюм горничной.</Make_ChjAndroidMaidBattleDress.description>
+  <Make_ChjAndroidMaidBattleDress.jobString>изготавливает боевой костюм горничной</Make_ChjAndroidMaidBattleDress.jobString>
+
+  <Make_ChjAndroidBattleMaidHat.label>изготовить боевой головной убор горничной</Make_ChjAndroidBattleMaidHat.label>
+  <Make_ChjAndroidBattleMaidHat.description>Изготовить боевой головной убор горничной.</Make_ChjAndroidBattleMaidHat.description>
+  <Make_ChjAndroidBattleMaidHat.jobString>изготавливает боевой головной убор горничной</Make_ChjAndroidBattleMaidHat.jobString>
+
+  <Make_ChjAndroidBattery.label>изготовить батарею</Make_ChjAndroidBattery.label>
+  <Make_ChjAndroidBattery.description>Изготовить батарею.</Make_ChjAndroidBattery.description>
+  <Make_ChjAndroidBattery.jobString>изготавливает батарею</Make_ChjAndroidBattery.jobString>
+
+  <Make_ChjDroidRepairParts.label>изготовить запчасти</Make_ChjDroidRepairParts.label>
+  <Make_ChjDroidRepairParts.description>Изготовить запчасти.</Make_ChjDroidRepairParts.description>
+  <Make_ChjDroidRepairParts.jobString>изготавливает запчасти</Make_ChjDroidRepairParts.jobString>
+
+  <Make_ChjDroidRepairKit.label>изготовить ремонтный комплект</Make_ChjDroidRepairKit.label>
+  <Make_ChjDroidRepairKit.description>Изготовить ремонтный комплект.</Make_ChjDroidRepairKit.description>
+  <Make_ChjDroidRepairKit.jobString>изготавливает ремонтный комплект</Make_ChjDroidRepairKit.jobString>
+
+  <Make_ChjAndroid_SolarDuster.label>сшить плащ с солнечными панелями</Make_ChjAndroid_SolarDuster.label>
+  <Make_ChjAndroid_SolarDuster.description>Сшить плащ с солнечными панелями.</Make_ChjAndroid_SolarDuster.description>
+  <Make_ChjAndroid_SolarDuster.jobString>шьёт плащ с солнечными панелями</Make_ChjAndroid_SolarDuster.jobString>
+
+  <Make_ChjAndroid_ChemfuelGenerator.label>изготовить портативный генератор</Make_ChjAndroid_ChemfuelGenerator.label>
+  <Make_ChjAndroid_ChemfuelGenerator.description>Изготовить портативный генератор.</Make_ChjAndroid_ChemfuelGenerator.description>
+  <Make_ChjAndroid_ChemfuelGenerator.jobString>изготавливает портативный генератор</Make_ChjAndroid_ChemfuelGenerator.jobString>
+
+  <Make_ChjAndroidGun_RebelRifle.label>изготовить мятежную винтовку</Make_ChjAndroidGun_RebelRifle.label>
+  <Make_ChjAndroidGun_RebelRifle.description>Изготовить мятежную винтовку.</Make_ChjAndroidGun_RebelRifle.description>
+  <Make_ChjAndroidGun_RebelRifle.jobString>изготавливает мятежную винтовку</Make_ChjAndroidGun_RebelRifle.jobString>
+
+  <Make_ChjAndroidGun_Rebelpistol.label>изготовить мятежный пистолет</Make_ChjAndroidGun_Rebelpistol.label>
+  <Make_ChjAndroidGun_Rebelpistol.description>Изготовить мятежный пистолет.</Make_ChjAndroidGun_Rebelpistol.description>
+  <Make_ChjAndroidGun_Rebelpistol.jobString>изготавливает мятежный пистолет</Make_ChjAndroidGun_Rebelpistol.jobString>
+
+  <Make_Gun_ChjCoreLauncher.label>изготовить энергетический арбалет</Make_Gun_ChjCoreLauncher.label>
+  <Make_Gun_ChjCoreLauncher.description>Изготовить энергетический арбалет.</Make_Gun_ChjCoreLauncher.description>
+  <Make_Gun_ChjCoreLauncher.jobString>изготавливает энергетический арбалет</Make_Gun_ChjCoreLauncher.jobString>
+
+</LanguageData>

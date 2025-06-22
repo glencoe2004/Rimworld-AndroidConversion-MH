@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<!-- Physiques -->
+	<AndroidConversion.AndroidUpgradeGroupDef>
+		<defName>Physique</defName>
+		<label>Physique</label>
+		<orderID>0</orderID>
+	</AndroidConversion.AndroidUpgradeGroupDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_HulkPhysique</defName>
+		<label>Hulk Physique</label>
+		<description>Gives the Android an hulking and strong physique. The Android is now better at physically demanding tasks.\n-- "Hulk smash!"</description>
+		<commandType>AndroidConversion.UpgradeCommand_Body</commandType>
+		<iconTexturePath>Icons/Upgrades/biceps</iconTexturePath>
+		<orderID>1</orderID>
+		<upgradeGroup>Physique</upgradeGroup>
+		<!-- <newBodyType>Hulk</newBodyType> -->
+		<hediffToApply>ChjAndroidUpgrade_Hulking</hediffToApply>
+		<exclusivityGroups>
+			<li>Physique</li>
+		</exclusivityGroups>
+		<costList>
+			<Nutrition>10</Nutrition>
+			<ComponentSpacer>1</ComponentSpacer>
+			<Uranium>10</Uranium>
+			<Plasteel>50</Plasteel>
+		</costList>
+		<extraPrintingTime>30000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Physique</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_AgilePhysique</defName>
+		<label>Agile Physique</label>
+		<description>Gives the Android an thin and agile physique. The Android is now faster and better at dodging.\n-- "Orassan go nyoom!"</description>
+		<commandType>AndroidConversion.UpgradeCommand_Body</commandType>
+		<iconTexturePath>Icons/Upgrades/body-balance</iconTexturePath>
+		<orderID>1</orderID>
+		<upgradeGroup>Physique</upgradeGroup>
+		<!-- <newBodyType>Thin</newBodyType> -->
+		<hediffToApply>ChjAndroidUpgrade_Agile</hediffToApply>
+		<exclusivityGroups>
+			<li>Physique</li>
+		</exclusivityGroups>
+		<costList>
+			<Nutrition>2</Nutrition>
+			<ComponentSpacer>5</ComponentSpacer>
+		</costList>
+		<extraPrintingTime>30000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Physique</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_SuperPhysique</defName>
+		<label>Perfect Physique</label>
+		<description>Gives the Android an perfect physique. Bringing the best of both the agile and hulking phyisque together. The Android is now superior at everything physical.\n-- "I am now perfect."</description>
+		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
+		<iconTexturePath>Icons/Upgrades/meditation</iconTexturePath>
+		<orderID>0</orderID>
+		<upgradeGroup>Physique</upgradeGroup>
+		<hediffToApply>ChjAndroidUpgrade_Super</hediffToApply>
+		<exclusivityGroups>
+			<li>Physique</li>
+		</exclusivityGroups>
+		<costList>
+			<Nutrition>20</Nutrition>
+			<ComponentSpacer>8</ComponentSpacer>
+			<Plasteel>25</Plasteel>
+		</costList>
+		<extraPrintingTime>60000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Physique</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+	<!-- Physiques -->
+	<AndroidConversion.AndroidModGroupDef>
+		<defName>Physique</defName>
+		<label>Physique</label>
+		<orderID>0</orderID>
+		<physical>true</physical>
+	</AndroidConversion.AndroidModGroupDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Upgrade_HulkPhysique</defName>
+		<label>Hulk Physique</label>
+		<description>Gives the Android an hulking and strong physique. The Android is now better at physically demanding tasks.\n-- "Hulk smash!"</description>
+		<modType>AndroidConversion.ModCommand_Body</modType>
+		<iconTexturePath>Icons/Upgrades/biceps</iconTexturePath>
+		<orderID>1</orderID>
+		<modGroup>Physique</modGroup>
+		<newBodyType>Hulk</newBodyType>
+		<hediffToApply>ChjAndroidUpgrade_Hulking</hediffToApply>
+		<exclusivityGroups>
+			<li>Physique</li>
+		</exclusivityGroups>
+		<costList>
+			<Nutrition>10</Nutrition>
+			<ComponentSpacer>1</ComponentSpacer>
+		</costList>
+		<extraPrintingTime>30000</extraPrintingTime>
+		<removalPrintingTime>15000</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Physique</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Upgrade_AgilePhysique</defName>
+		<label>Agile Physique</label>
+		<description>Gives the Android an thin and agile physique. The Android is now faster and better at dodging.\n-- "Orassan go nyoom!"</description>
+		<modType>AndroidConversion.ModCommand_Body</modType>
+		<iconTexturePath>Icons/Upgrades/body-balance</iconTexturePath>
+		<orderID>1</orderID>
+		<modGroup>Physique</modGroup>
+		<newBodyType>Thin</newBodyType>
+		<hediffToApply>ChjAndroidUpgrade_Agile</hediffToApply>
+		<exclusivityGroups>
+			<li>Physique</li>
+		</exclusivityGroups>
+		<costList>
+			<Nutrition>2</Nutrition>
+			<ComponentSpacer>5</ComponentSpacer>
+		</costList>
+		<extraPrintingTime>30000</extraPrintingTime>
+		<removalPrintingTime>15000</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Physique</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Upgrade_SuperPhysique</defName>
+		<label>Perfect Physique</label>
+		<description>Gives the Android an perfect physique. Bringing the best of both the agile and hulking phyisque together. The Android is now superior at everything physical.\n-- "I am now perfect."</description>
+		<modType>AndroidConversion.ModCommand_Hediff</modType>
+		<iconTexturePath>Icons/Upgrades/meditation</iconTexturePath>
+		<orderID>0</orderID>
+		<modGroup>Physique</modGroup>
+		<hediffToApply>ChjAndroidUpgrade_Super</hediffToApply>
+		<exclusivityGroups>
+			<li>Physique</li>
+		</exclusivityGroups>
+		<costList>
+			<Nutrition>20</Nutrition>
+			<ComponentSpacer>8</ComponentSpacer>
+		</costList>
+		<extraPrintingTime>60000</extraPrintingTime>
+		<removalPrintingTime>30000</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Physique</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+</Defs>

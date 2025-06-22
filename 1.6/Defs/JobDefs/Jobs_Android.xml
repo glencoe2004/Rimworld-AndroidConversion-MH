@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<JobDef>
+		<defName>DekFillConversionChamber</defName>
+		<driverClass>JobDriver_HaulToContainer</driverClass>
+		<reportString>hauling TargetA.</reportString>
+	</JobDef>
+	<JobDef>
+		<defName>DekEnterConversionChamber</defName>
+		<driverClass>AndroidConversion.JobDriver_EnterConversionChamber</driverClass>
+		<reportString>entering TargetA.</reportString>
+	</JobDef>
+</Defs>

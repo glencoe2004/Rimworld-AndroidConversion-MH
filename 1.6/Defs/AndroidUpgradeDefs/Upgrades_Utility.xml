@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<!-- Archotech -->
+	<AndroidConversion.AndroidUpgradeGroupDef>
+		<defName>Utility</defName>
+		<label>Utility</label>
+		<orderID>300</orderID>
+	</AndroidConversion.AndroidUpgradeGroupDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_VanometricCell</defName>
+		<label>Vanometric Cell</label>
+		<description>Miniature version of the Vanometric Powercell. When installed it frees the Android of the need for both energy and food. Truly the ultimate upgrade.\n-- "Power Overwhelming."</description>
+		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
+		<iconTexturePath>Icons/Upgrades/energise</iconTexturePath>
+		<orderID>0</orderID>
+		<upgradeGroup>Utility</upgradeGroup>
+		<costList>
+			<ComponentSpacer>15</ComponentSpacer>
+		</costList>
+		<hediffToApply>ChjAndroidUpgrade_VanometricCell</hediffToApply>
+		<extraPrintingTime>120000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Utility</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_MechaniteHive</defName>
+		<label>Mechanite Hive</label>
+		<description>Thumb sized devices placed throughout the body containing self maintaining factories of mechanites. Acts much like human blood when its exposed to the air and plugs any holes it detects.\n-- "I feel nothing!"</description>
+		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
+		<iconTexturePath>Icons/Upgrades/first-aid-kit</iconTexturePath>
+		<orderID>0</orderID>
+		<upgradeGroup>Utility</upgradeGroup>
+		<costList>
+			<ComponentSpacer>6</ComponentSpacer>
+			<MedicineUltratech>6</MedicineUltratech>
+		</costList>
+		<hediffToApply>ChjAndroidUpgrade_MechaniteHive</hediffToApply>
+		<extraPrintingTime>30000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Utility</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_PsychicAttunement</defName>
+		<label>Psychic Attunement</label>
+		<description>By utilizing a material which got the opposite effect of psychic foil so can the mind and body of the android become a attractor for psionic forces. Why you would want to do this without the presence of fantastical forces like Magic on the RimWorld is beyond many scientists.\n-- "I only need my mind to take you down."</description>
+		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
+		<iconTexturePath>Icons/Upgrades/psychic-waves</iconTexturePath>
+		<orderID>0</orderID>
+		<upgradeGroup>Utility</upgradeGroup>
+		<costList>
+			<ComponentSpacer>1</ComponentSpacer>
+			<Plasteel>15</Plasteel>
+		</costList>
+		<hediffToApply>ChjAndroidUpgrade_PsychicAttunement</hediffToApply>
+		<extraPrintingTime>15000</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Utility</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+
+	<!-- Archotech -->
+	<AndroidConversion.AndroidModGroupDef>
+		<defName>Utility</defName>
+		<label>Utility</label>
+		<orderID>300</orderID>
+		<physical>true</physical>
+	</AndroidConversion.AndroidModGroupDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Upgrade_VanometricCell</defName>
+		<label>Vanometric Cell</label>
+		<description>Miniature version of the Vanometric Powercell. When installed it frees the Android of the need for both energy and food. Truly the ultimate upgrade.\n-- "Power Overwhelming."</description>
+		<modType>AndroidConversion.ModCommand_Hediff</modType>
+		<iconTexturePath>Icons/Upgrades/energise</iconTexturePath>
+		<orderID>0</orderID>
+		<modGroup>Utility</modGroup>
+		<costList>
+			<ComponentSpacer>15</ComponentSpacer>
+		</costList>
+		<hediffToApply>ChjAndroidUpgrade_VanometricCell</hediffToApply>
+		<extraPrintingTime>120000</extraPrintingTime>
+		<removalPrintingTime>60000</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Utility</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Upgrade_MechaniteHive</defName>
+		<label>Mechanite Hive</label>
+		<description>Thumb sized devices placed throughout the body containing self maintaining factories of mechanites. Acts much like human blood when its exposed to the air and plugs any holes it detects.\n-- "I feel nothing!"</description>
+		<modType>AndroidConversion.ModCommand_Hediff</modType>
+		<iconTexturePath>Icons/Upgrades/first-aid-kit</iconTexturePath>
+		<orderID>0</orderID>
+		<modGroup>Utility</modGroup>
+		<costList>
+			<ComponentSpacer>6</ComponentSpacer>
+			<MedicineUltratech>6</MedicineUltratech>
+		</costList>
+		<hediffToApply>ChjAndroidUpgrade_MechaniteHive</hediffToApply>
+		<extraPrintingTime>30000</extraPrintingTime>
+		<removalPrintingTime>15000</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Utility</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Upgrade_PsychicAttunement</defName>
+		<label>Psychic Attunement</label>
+		<description>By utilizing a material which got the opposite effect of psychic foil so can the mind and body of the android become a attractor for psionic forces. Why you would want to do this without the presence of fantastical forces like Magic on the RimWorld is beyond many scientists.\n-- "I only need my mind to take you down."</description>
+		<modType>AndroidConversion.ModCommand_Hediff</modType>
+		<iconTexturePath>Icons/Upgrades/psychic-waves</iconTexturePath>
+		<orderID>0</orderID>
+		<modGroup>Utility</modGroup>
+		<costList>
+			<ComponentSpacer>1</ComponentSpacer>
+			<Plasteel>15</Plasteel>
+		</costList>
+		<hediffToApply>ChjAndroidUpgrade_PsychicAttunement</hediffToApply>
+		<extraPrintingTime>15000</extraPrintingTime>
+		<removalPrintingTime>7500</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Utility</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+</Defs>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<!-- Upgrades -->
+	<ResearchProjectDef>
+		<defName>ChJAndroidUpgrade_Hub</defName>
+		<tab>ATR_MechResearch</tab>
+		<label>android upgrades basics</label>
+		<description>Allows upgrading your Androids at the body transformation stage to permanently improve them beyond normal means.</description>
+		<baseCost>1000</baseCost>
+		<techLevel>Spacer</techLevel>
+		<prerequisites>
+			<li>DekAndroidConversion</li>
+		</prerequisites>
+		<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+		<requiredResearchFacilities>
+			<li>MultiAnalyzer</li>
+		</requiredResearchFacilities>
+		<researchViewX>8.00</researchViewX>
+		<researchViewY>4</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>ChJAndroidUpgrade_Physique</defName>
+		<tab>ATR_MechResearch</tab>
+		<label>physique module</label>
+		<description>Unlocks the secrets to perfecting the form of your Androids. Make them stronger, faster and better!</description>
+		<baseCost>2000</baseCost>
+		<techLevel>Spacer</techLevel>
+		<prerequisites>
+			<li>ChJAndroidUpgrade_Hub</li>
+		</prerequisites>
+		<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+		<requiredResearchFacilities>
+			<li>MultiAnalyzer</li>
+		</requiredResearchFacilities>
+		<researchViewX>8.00</researchViewX>
+		<researchViewY>3.40</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>ChJAndroidUpgrade_Skin</defName>
+		<tab>ATR_MechResearch</tab>
+		<label>skin module</label>
+		<description>Unlocks the secrets to perfecting the synthetic skin of your Androids. Improves the durability of your Androids. Also can come with other perks.</description>
+		<baseCost>2000</baseCost>
+		<techLevel>Spacer</techLevel>
+		<prerequisites>
+			<li>ChJAndroidUpgrade_Hub</li>
+		</prerequisites>
+		<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+		<requiredResearchFacilities>
+			<li>MultiAnalyzer</li>
+		</requiredResearchFacilities>
+		<researchViewX>8.00</researchViewX>
+		<researchViewY>4.70</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>ChJAndroidUpgrade_Utility</defName>
+		<tab>ATR_MechResearch</tab>
+		<label>utility module</label>
+		<description>Unlocks the secrets to improving your Androids in every way possible. From installing a vanometric cell rendering your Android immune to the need of food and energy to more mundane tools.</description>
+		<baseCost>2000</baseCost>
+		<techLevel>Spacer</techLevel>
+		<prerequisites>
+			<li>ChJAndroidUpgrade_Hub</li>
+		</prerequisites>
+		<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+		<requiredResearchFacilities>
+			<li>MultiAnalyzer</li>
+		</requiredResearchFacilities>
+		<researchViewX>9.00</researchViewX>
+		<researchViewY>3.40</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>ChJAndroidUpgrade_Proficency</defName>
+		<tab>ATR_MechResearch</tab>
+		<label>proficency module</label>
+		<description>Unlocks the secrets to improving your Androids work speed and efficiency. Further augment your Androids skillset with these.</description>
+		<baseCost>2000</baseCost>
+		<techLevel>Spacer</techLevel>
+		<prerequisites>
+			<li>ChJAndroidUpgrade_Hub</li>
+		</prerequisites>
+		<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+		<requiredResearchFacilities>
+			<li>MultiAnalyzer</li>
+		</requiredResearchFacilities>
+		<researchViewX>9.00</researchViewX>
+		<researchViewY>4.70</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>ChJAndroidUpgrade_Archotech</defName>
+		<tab>ATR_MechResearch</tab>
+		<label>glitterworld module</label>
+		<description>Unlocks the ultimate upgrade to an Android: The ability to fully integrate a near-Archotech AI in form of a Persona Core into its synthetic frame. Have we gone too far?</description>
+		<baseCost>3000</baseCost>
+		<techLevel>Ultra</techLevel>
+		<prerequisites>
+			<li>ChJAndroidUpgrade_Hub</li>
+		</prerequisites>
+		<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+		<requiredResearchFacilities>
+			<li>MultiAnalyzer</li>
+		</requiredResearchFacilities>
+		<researchViewX>9.00</researchViewX>
+		<researchViewY>4</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>DekAndroidConversion</defName>
+		<tab>ATR_MechResearch</tab>
+		<label>Android Conversion Chamber</label>
+		<description>Allows the construction of a conversion chamber, where organic colonists can be converted into androids. Can also be used to apply new upgrades to existing androids. Uses the same technology as a cryptosleep casket to keep colonists alive in case of power failure.</description>
+		<baseCost>8000</baseCost>
+		<techLevel>Ultra</techLevel>
+		<prerequisites>
+			<li>AdvancedFabrication</li>
+			<li>BiofuelRefining</li>
+			<li>Batteries</li>
+			<li>ShipCryptosleep</li>
+			<li>ATR_T4Androids</li>
+		</prerequisites>
+		<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+		<requiredResearchFacilities>
+			<li>MultiAnalyzer</li>
+		</requiredResearchFacilities>
+		<researchViewX>7.00</researchViewX>
+		<researchViewY>4.00</researchViewY>
+	</ResearchProjectDef>
+</Defs>

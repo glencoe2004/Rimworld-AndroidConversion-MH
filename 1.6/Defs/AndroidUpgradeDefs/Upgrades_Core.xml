@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<!-- Core -->
+	<AndroidConversion.AndroidUpgradeGroupDef>
+		<defName>Core</defName>
+		<label>Core</label>
+		<orderID>-1</orderID>
+	</AndroidConversion.AndroidUpgradeGroupDef>
+
+	<AndroidConversion.AndroidUpgradeDef>
+		<defName>Upgrade_DroneCore</defName>
+		<label>Drone Mentality</label>
+		<description>Turns the Android almost completely into a drone. Their capability to learn is greatly lowered and they are not affected by mood so much.\n-- "Ignorance is bliss."</description>
+		<commandType>AndroidConversion.UpgradeCommand_Hediff</commandType>
+		<iconTexturePath>Icons/Upgrades/vintage-robot</iconTexturePath>
+		<orderID>0</orderID>
+		<upgradeGroup>Core</upgradeGroup>
+		<hediffToApply>ChjAndroidUpgrade_DroneCore</hediffToApply>
+		<exclusivityGroups>
+			<li>Core</li>
+		</exclusivityGroups>
+		<extraPrintingTime>0</extraPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Hub</requiredResearch>
+	</AndroidConversion.AndroidUpgradeDef>
+
+	
+
+	<AndroidConversion.AndroidModGroupDef>
+		<defName>Core</defName>
+		<label>Core</label>
+		<orderID>-1</orderID>
+		<physical>false</physical>
+	</AndroidConversion.AndroidModGroupDef>
+
+	<AndroidConversion.AndroidModDef>
+		<defName>Upgrade_DroneCore</defName>
+		<label>Drone Mentality</label>
+		<description>Turns the Android almost completely into a drone. Their capability to learn is greatly lowered and they are not affected by mood so much.\n-- "Ignorance is bliss."</description>
+		<modType>AndroidConversion.ModCommand_Hediff</modType>
+		<iconTexturePath>Icons/Upgrades/vintage-robot</iconTexturePath>
+		<orderID>0</orderID>
+		<modGroup>Core</modGroup>
+		<hediffToApply>ChjAndroidUpgrade_DroneCore</hediffToApply>
+		<exclusivityGroups>
+			<li>Core</li>
+		</exclusivityGroups>
+		<extraPrintingTime>200</extraPrintingTime>
+		<removalPrintingTime>200</removalPrintingTime>
+		<requiredResearch>ChJAndroidUpgrade_Hub</requiredResearch>
+	</AndroidConversion.AndroidModDef>
+</Defs>
