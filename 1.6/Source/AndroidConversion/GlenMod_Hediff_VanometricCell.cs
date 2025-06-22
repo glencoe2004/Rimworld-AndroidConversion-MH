@@ -15,11 +15,7 @@ namespace AndroidConversion
 			{
 				need_Food.CurLevel = need_Food.MaxLevel;
 			}
-			//Need_Energy need_Energy = pawn?.needs?.TryGetNeed<Need_Energy>();
-			//if (need_Energy != null)
-			//{
-			//	need_Energy.CurLevel = need_Energy.MaxLevel;
-			//}
+
 		}
 	}
 }
