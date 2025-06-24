@@ -33,6 +33,10 @@
     <OutputPath>..\Assemblies\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\rimworld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
@@ -62,6 +66,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidConversion\AndroidConversionSettings.cs" />
+    <Compile Include="AndroidConversion\AndroidConversionSettingsHandler.cs" />
     <Compile Include="AndroidConversion\AndroidConversionWindow.cs" />
     <Compile Include="AndroidConversion\AndroidModDef.cs" />
     <Compile Include="AndroidConversion\AndroidModGroupDef.cs" />

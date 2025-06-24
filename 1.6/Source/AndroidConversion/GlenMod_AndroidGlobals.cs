@@ -8,18 +8,24 @@ namespace AndroidConversion
 {
     public class GlenMod_AndroidGlobals
     {
-        public static readonly bool GlenMod_expensiveAndroids = true;
-        public static readonly bool GlenMod_expensiveAndroidsDroneNeedsPersonaCore = GlenMod_expensiveAndroids && false;
-        public static readonly bool GlenMod_sizeCostScaling = false;
-        public static readonly int GlenMod_printTimeMult = 1;
-        public static readonly int GlenMod_basePrintTime = 60000;
+        // Conversion permission settings (now modifiable by settings)
+        public static bool GlenMod_allowHostileConversion = false;
+        public static bool GlenMod_allowGuestConversion = false;
+        public static bool GlenMod_allowGuestPrisonerConversion = false;
 
-        public static readonly int GlenMod_maxTraitsToPick = 7;
-        public static readonly int GlenMod_upgradeBaseSize = 48;
+        // These are now modifiable by the settings system
+        public static bool GlenMod_expensiveAndroids = true;
+        public static bool GlenMod_expensiveAndroidsDroneNeedsPersonaCore = false;
+        public static bool GlenMod_sizeCostScaling = false;
+        public static int GlenMod_printTimeMult = 1;
+        public static int GlenMod_basePrintTime = 60000;
+        public static int GlenMod_maxTraitsToPick = 7;
+        public static int GlenMod_upgradeBaseSize = 48;
 
-        // Conversion permission settings
-        public static readonly bool GlenMod_allowHostileConversion = false;
-        public static readonly bool GlenMod_allowGuestConversion = false;
-        public static readonly bool GlenMod_allowGuestPrisonerConversion = false;
+        // Static constructor to initialize from settings
+        static GlenMod_AndroidGlobals()
+        {
+            // Values will be updated when the settings handler initializes
+        }
     }
 }

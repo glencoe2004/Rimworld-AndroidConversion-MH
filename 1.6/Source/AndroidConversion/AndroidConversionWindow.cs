@@ -566,7 +566,7 @@ public class AndroidConversionWindow : Window
 			gold.nutrition = false;
 			gold.thingDef = RimWorld.ThingDefOf.Gold;
 			finalConversionItemCost.Add(gold);
-			if (appliedUpgradeCommands.SingleOrDefault((ModCommand c) => c.def.defName == "Upgrade_DroneCore") == null && GlenMod_AndroidGlobals.GlenMod_expensiveAndroidsDroneNeedsPersonaCore)
+			if (appliedUpgradeCommands.SingleOrDefault((ModCommand c) => c.def.defName == "Upgrade_DroneCore") != null && GlenMod_AndroidGlobals.GlenMod_expensiveAndroidsDroneNeedsPersonaCore)
 			{
 				ThingOrderRequest aiCore = new ThingOrderRequest();
 				aiCore.amount = 1f;

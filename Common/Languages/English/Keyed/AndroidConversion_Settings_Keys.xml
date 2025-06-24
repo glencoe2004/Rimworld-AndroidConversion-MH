@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- Settings Window -->
+	<AC_SettingsCategory>Android Conversion</AC_SettingsCategory>
+	
+	<!-- Conversion Permission Settings -->
+	<AC_AllowHostileConversion>Allow Hostile Conversion</AC_AllowHostileConversion>
+	<AC_AllowHostileConversionTooltip>Allows converting hostile pawns (enemies).</AC_AllowHostileConversionTooltip>
+	<AC_AllowGuestConversion>Allow Guest Conversion</AC_AllowGuestConversion>
+	<AC_AllowGuestConversionTooltip>Allows converting quest lodgers and guests.</AC_AllowGuestConversionTooltip>
+	<AC_AllowGuestPrisonerConversion>Allow Guest Prisoner Conversion</AC_AllowGuestPrisonerConversion>
+	<AC_AllowGuestPrisonerConversionTooltip>Allows converting guest prisoners from other factions.</AC_AllowGuestPrisonerConversionTooltip>
+	
+	<!-- Balance Settings -->
+	<AC_ExpensiveAndroids>Expensive Androids</AC_ExpensiveAndroids>
+	<AC_ExpensiveAndroidsTooltip>Makes android conversion more expensive, requiring additional rare resources.</AC_ExpensiveAndroidsTooltip>
+	<AC_DroneNeedsPersonaCore>Drone Core Requires Persona Core</AC_DroneNeedsPersonaCore>
+	<AC_DroneNeedsPersonaCoreTooltip>When enabled, selecting the Drone Core upgrade will require a persona core.</AC_DroneNeedsPersonaCoreTooltip>
+	<AC_SizeCostScaling>Size-Based Cost Scaling</AC_SizeCostScaling>
+	<AC_SizeCostScalingTooltip>Scales resource costs based on the size of the pawn being converted.</AC_SizeCostScalingTooltip>
+	<AC_PrintTimeMultiplier>Print Time Multiplier</AC_PrintTimeMultiplier>
+	<AC_BasePrintTime>Base Print Time</AC_BasePrintTime>
+	<AC_MaxTraits>Maximum Traits to Pick</AC_MaxTraits>
+	<AC_UpgradeIconSize>Upgrade Icon Size</AC_UpgradeIconSize>
+	<AC_ApplyChanges>Apply Changes</AC_ApplyChanges>
+	
+	<!-- Additional language keys for conversion chamber messages -->
+	<ConversionChamberGuestPrisonersNotAllowed>guest prisoners not allowed</ConversionChamberGuestPrisonersNotAllowed>
+</LanguageData>
