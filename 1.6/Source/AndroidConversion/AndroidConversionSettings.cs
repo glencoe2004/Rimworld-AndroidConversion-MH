@@ -31,6 +31,26 @@ namespace AndroidConversion
             Scribe_Values.Look(ref maxTraitsToPick, "maxTraitsToPick", 7);
             Scribe_Values.Look(ref upgradeBaseSize, "upgradeBaseSize", 48);
             base.ExposeData();
+            
+            // After loading/saving, ensure global variables are updated
+            if (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                UpdateGlobalVariablesFromSettings();
+            }
+        }
+        
+        private void UpdateGlobalVariablesFromSettings()
+        {
+            GlenMod_AndroidGlobals.GlenMod_allowHostileConversion = allowHostileConversion;
+            GlenMod_AndroidGlobals.GlenMod_allowGuestConversion = allowGuestConversion;
+            GlenMod_AndroidGlobals.GlenMod_allowGuestPrisonerConversion = allowGuestPrisonerConversion;
+            GlenMod_AndroidGlobals.GlenMod_expensiveAndroids = expensiveAndroids;
+            GlenMod_AndroidGlobals.GlenMod_expensiveAndroidsDroneNeedsPersonaCore = expensiveAndroidsDroneNeedsPersonaCore;
+            GlenMod_AndroidGlobals.GlenMod_sizeCostScaling = sizeCostScaling;
+            GlenMod_AndroidGlobals.GlenMod_printTimeMult = printTimeMult;
+            GlenMod_AndroidGlobals.GlenMod_basePrintTime = basePrintTime;
+            GlenMod_AndroidGlobals.GlenMod_maxTraitsToPick = maxTraitsToPick;
+            GlenMod_AndroidGlobals.GlenMod_upgradeBaseSize = upgradeBaseSize;
         }
     }
 }

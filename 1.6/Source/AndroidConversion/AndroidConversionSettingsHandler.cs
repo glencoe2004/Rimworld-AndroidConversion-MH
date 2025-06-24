@@ -28,6 +28,18 @@ namespace AndroidConversion
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(inRect);
 
+            // Store previous values to detect changes
+            bool prevAllowHostile = Settings.allowHostileConversion;
+            bool prevAllowGuest = Settings.allowGuestConversion;
+            bool prevAllowGuestPrisoner = Settings.allowGuestPrisonerConversion;
+            bool prevExpensive = Settings.expensiveAndroids;
+            bool prevDroneCore = Settings.expensiveAndroidsDroneNeedsPersonaCore;
+            bool prevSizeScaling = Settings.sizeCostScaling;
+            int prevPrintMult = Settings.printTimeMult;
+            int prevBasePrint = Settings.basePrintTime;
+            int prevMaxTraits = Settings.maxTraitsToPick;
+            int prevUpgradeSize = Settings.upgradeBaseSize;
+
             // Conversion Permission Settings
             listing.Label("Conversion Permissions:");
             listing.CheckboxLabeled("Allow Hostile Conversion", ref Settings.allowHostileConversion,
@@ -66,7 +78,7 @@ namespace AndroidConversion
             // Base Print Time (in hours for display)
             float hours = Settings.basePrintTime / 2500f;
             listing.Label("Base Print Time: " + hours.ToString("F1") + " hours");
-            hours = listing.Slider(hours, 0.5f, 10f);
+            hours = listing.Slider(hours, 0.5f, 40f);
             Settings.basePrintTime = (int)(hours * 2500f);
 
             listing.Gap(12f);
@@ -79,15 +91,29 @@ namespace AndroidConversion
             listing.Label("Upgrade Icon Size: " + Settings.upgradeBaseSize + "px");
             Settings.upgradeBaseSize = (int)listing.Slider(Settings.upgradeBaseSize, 24, 128);
 
-            listing.Gap(12f);
+            listing.End();
 
-            // Apply button
-            if (listing.ButtonText("Apply Changes"))
+            // Check if any values changed and update immediately
+            bool hasChanges =
+                prevAllowHostile != Settings.allowHostileConversion ||
+                prevAllowGuest != Settings.allowGuestConversion ||
+                prevAllowGuestPrisoner != Settings.allowGuestPrisonerConversion ||
+                prevExpensive != Settings.expensiveAndroids ||
+                prevDroneCore != Settings.expensiveAndroidsDroneNeedsPersonaCore ||
+                prevSizeScaling != Settings.sizeCostScaling ||
+                prevPrintMult != Settings.printTimeMult ||
+                prevBasePrint != Settings.basePrintTime ||
+                prevMaxTraits != Settings.maxTraitsToPick ||
+                prevUpgradeSize != Settings.upgradeBaseSize;
+
+            if (hasChanges)
             {
                 UpdateGlobalVariables();
+
+                // Write settings to file immediately when changed
+                WriteSettings();
             }
 
-            listing.End();
             base.DoSettingsWindowContents(inRect);
         }
 
