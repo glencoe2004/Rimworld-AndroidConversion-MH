@@ -49,35 +49,60 @@ public class JobDriver_CarryToConversionChamberDrafted : JobDriver
 		waitToil.WithProgressBarToilDelay(TargetIndex.B);
 		yield return waitToil;
 
-		Toil placeInChamber = ToilMaker.MakeToil("PlaceInConversionChamber");
-		placeInChamber.initAction = delegate
-		{
-			// Use TryTransferToContainer instead of TryAcceptThing to handle the transfer properly
-			if (pawn.carryTracker.CarriedThing == Takee)
-			{
-				// Transfer directly from carry tracker to conversion chamber
-				if (pawn.carryTracker.innerContainer.TryTransferToContainer(Takee, ConversionChamber.innerContainer))
-				{
-					// Set faction if needed (from TryAcceptThing logic)
-					if (Takee.Faction != null && Takee.Faction.IsPlayer)
-					{
-						ConversionChamber.contentsKnown = true;
-					}
+        Toil placeInChamber = new Toil();
+        placeInChamber.initAction = delegate
+        {
+            Pawn carriedPawn = Takee as Pawn;
 
-					// Set the chamber status to idle (from TryAcceptThing logic)
-					ConversionChamber.ChamberStatus = ModdingStatus.Idle;
+            // Check if the carried pawn's faction is neutral and make it hostile before placing
+            if (carriedPawn != null &&
+                carriedPawn.Faction != null &&
+                carriedPawn.Faction != Faction.OfPlayer &&
+                carriedPawn.Faction.RelationKindWith(Faction.OfPlayer) == FactionRelationKind.Neutral)
+            {
+                // Make the faction hostile to the player
+                if (carriedPawn.Faction.HasGoodwill)
+                {
+                    // For factions with goodwill system, reduce goodwill to hostile level
+                    int currentGoodwill = carriedPawn.Faction.GoodwillWith(Faction.OfPlayer);
+                    int goodwillChangeNeeded = -75 - currentGoodwill - 1; // -1 to ensure it goes below -75
+                    Faction.OfPlayer.TryAffectGoodwillWith(carriedPawn.Faction, goodwillChangeNeeded, canSendMessage: true, canSendHostilityLetter: true);
+                    Log.Message($"Neutral pawn {carriedPawn.Name} being placed in conversion chamber - reduced {carriedPawn.Faction.Name} goodwill to hostile level");
+                }
+                else
+                {
+                    // For factions without goodwill, use direct relation setting
+                    carriedPawn.Faction.SetRelationDirect(Faction.OfPlayer, FactionRelationKind.Hostile, canSendHostilityLetter: true, reason: "Converted {0}");
+                    Log.Message($"Neutral pawn {carriedPawn.Name} being placed in conversion chamber - set faction {carriedPawn.Faction.Name} to hostile");
+                }
+            }
 
-					// Notify the conversion chamber that a pawn has entered
-					ConversionChamber.Notify_PawnEntered();
-				}
-			}
-			else
-			{
-				// Fallback if not carried (shouldn't happen but just in case)
-				ConversionChamber.TryAcceptThing(Takee);
-			}
-		};
-		placeInChamber.defaultCompleteMode = ToilCompleteMode.Instant;
+            // Original logic to handle the transfer properly
+            if (pawn.carryTracker.CarriedThing == Takee)
+            {
+                // Transfer directly from carry tracker to conversion chamber
+                if (pawn.carryTracker.innerContainer.TryTransferToContainer(Takee, ConversionChamber.innerContainer))
+                {
+                    // Set faction if needed (from TryAcceptThing logic)
+                    if (Takee.Faction != null && Takee.Faction.IsPlayer)
+                    {
+                        ConversionChamber.contentsKnown = true;
+                    }
+
+                    // Set the chamber status to idle (from TryAcceptThing logic)
+                    ConversionChamber.ChamberStatus = ModdingStatus.Idle;
+
+                    // Notify the conversion chamber that a pawn has entered
+                    ConversionChamber.Notify_PawnEntered();
+                }
+            }
+            else
+            {
+                // Fallback if not carried (shouldn't happen but just in case)
+                ConversionChamber.TryAcceptThing(Takee);
+            }
+        };
+        placeInChamber.defaultCompleteMode = ToilCompleteMode.Instant;
 		yield return placeInChamber;
 	}
 

@@ -151,8 +151,31 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			Log.Error(base.ThingID + " accepted non pawn " + pawn.ThingID + "/" + pawn.GetType().Name + "! this should never happen");
 			return false;
 		}
+
 		if (innerContainer.TryAdd(thing))
 		{
+			// Check if the pawn's faction is neutral to the player and make it hostile immediately
+			if (pawn.Faction != null &&
+				pawn.Faction != Faction.OfPlayer &&
+				pawn.Faction.RelationKindWith(Faction.OfPlayer) == FactionRelationKind.Neutral)
+			{
+				// Make the faction hostile to the player
+				if (pawn.Faction.HasGoodwill)
+				{
+					// For factions with goodwill system, reduce goodwill to hostile level
+					int currentGoodwill = pawn.Faction.GoodwillWith(Faction.OfPlayer);
+					int goodwillChangeNeeded = -75 - currentGoodwill - 1; // -1 to ensure it goes below -75
+					Faction.OfPlayer.TryAffectGoodwillWith(pawn.Faction, goodwillChangeNeeded, canSendMessage: true, canSendHostilityLetter: true);
+					Log.Message($"Neutral pawn {pawn.Name} placed in conversion chamber - reduced {pawn.Faction.Name} goodwill to hostile level");
+				}
+				else
+				{
+					// For factions without goodwill, use direct relation setting
+					pawn.Faction.SetRelationDirect(Faction.OfPlayer, FactionRelationKind.Hostile, canSendHostilityLetter: true);
+					Log.Message($"Neutral pawn {pawn.Name} placed in conversion chamber - set faction {pawn.Faction.Name} to hostile");
+				}
+			}
+
 			if (thing.Faction != null && thing.Faction.IsPlayer)
 			{
 				contentsKnown = true;
@@ -387,10 +410,43 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				}
 			}
 
-			// Ensure faction is maintained
+			// Ensure faction assignment - Modified to make neutral pawns join colony only if they have drone upgrade
 			if (originalFaction != null)
 			{
-				currentPawn.SetFaction(originalFaction);
+				// Check if the original faction is neutral to the player
+				if (originalFaction != Faction.OfPlayer &&
+					originalFaction.RelationKindWith(Faction.OfPlayer) == FactionRelationKind.Neutral)
+				{
+					// Make the original faction hostile to the player
+					originalFaction.SetRelationDirect(Faction.OfPlayer, FactionRelationKind.Hostile, canSendHostilityLetter: true, reason: "Converted {0}");
+					Log.Message($"Converted neutral pawn {currentPawn.Name} - set original faction {originalFaction.Name} to hostile");
+
+					// Check if the pawn has the drone upgrade
+					bool hasDroneUpgrade = currentPawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("ChjAndroidUpgrade_DroneCore"));
+
+					if (hasDroneUpgrade)
+					{
+						// Make the converted pawn with drone upgrade join the player's colony
+						currentPawn.SetFaction(Faction.OfPlayer);
+						Log.Message($"Converted neutral pawn {currentPawn.Name} with drone upgrade joined the colony");
+					}
+					else
+					{
+						// Keep the pawn in their original faction (now hostile)
+						currentPawn.SetFaction(originalFaction);
+						Log.Message($"Converted neutral pawn {currentPawn.Name} without drone upgrade remains in hostile faction {originalFaction.Name}");
+					}
+				}
+				else
+				{
+					// For non-neutral factions (hostile, ally, player), maintain original faction
+					currentPawn.SetFaction(originalFaction);
+				}
+			}
+			else
+			{
+				// If no original faction, assign to player faction as fallback
+				currentPawn.SetFaction(Faction.OfPlayer);
 			}
 
 			// Force complete graphics refresh
