@@ -64,7 +64,7 @@ namespace AndroidConversion
         // OPTIMIZATION: Pre-compiled field skip rules for faster checking
         private static readonly HashSet<string> SkippedFieldNames = new HashSet<string>
         {
-            "loadID", "part", "pawn", "def", "comps"
+            "loadID", "part", "pawn", "def", "comps", "tickAdded"
         };
 
         public static List<HediffSnapshot> PrepareHediffTransfer(Pawn pawn)
@@ -271,27 +271,32 @@ namespace AndroidConversion
 
                     if (targetPart != null)
                     {
-                        Hediff newHediff = (Hediff)Activator.CreateInstance(snapshot.HediffType);
+                        // Create the hediff using the proper factory method to ensure loadID is properly assigned
+                        Hediff newHediff = HediffMaker.MakeHediff(snapshot.HediffDef, pawn, targetPart);
 
-                        // Set pawn and def first, then part
-                        newHediff.pawn = pawn;
-                        newHediff.def = snapshot.HediffDef;
-                        newHediff.Part = targetPart;
-
-                        // Copy all the stored field values
+                        // Copy all the stored field values (but skip the ones that should be auto-assigned)
                         RestoreHediffFields(newHediff, snapshot.FieldValues);
 
-                        // Ensure Part is still set correctly after field restoration
+                        // Ensure critical fields are set correctly after field restoration
+                        if (newHediff.pawn == null)
+                        {
+                            newHediff.pawn = pawn;
+                        }
+
+                        if (newHediff.def == null)
+                        {
+                            newHediff.def = snapshot.HediffDef;
+                        }
+
                         if (newHediff.Part == null)
                         {
                             newHediff.Part = targetPart;
-                            Log.Warning($"Had to re-set Part for {snapshot.HediffDef.defName} after field restoration");
                         }
 
-                        // Add to pawn's health
+                        // Add to pawn's health - this will assign a proper loadID
                         pawn.health.AddHediff(newHediff);
 
-                        Log.Message($"Successfully transferred {snapshot.HediffDef.defName} to {targetPart.Label}");
+                        Log.Message($"Successfully transferred {snapshot.HediffDef.defName} to {targetPart.Label} with loadID {newHediff.loadID}");
                     }
                     else
                     {
@@ -316,6 +321,10 @@ namespace AndroidConversion
             {
                 try
                 {
+                    // Skip fields that should not be restored to avoid conflicts
+                    if (ShouldSkipFieldCached(kvp.Key))
+                        continue;
+
                     if (fieldLookup.TryGetValue(kvp.Key, out FieldInfo field) &&
                         !field.IsInitOnly && !field.IsLiteral)
                     {
