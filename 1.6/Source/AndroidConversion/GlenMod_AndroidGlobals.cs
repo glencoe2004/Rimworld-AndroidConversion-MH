@@ -17,5 +17,9 @@ namespace AndroidConversion
         public static readonly int GlenMod_maxTraitsToPick = 7;
         public static readonly int GlenMod_upgradeBaseSize = 48;
 
+        // Conversion permission settings
+        public static readonly bool GlenMod_allowHostileConversion = false;
+        public static readonly bool GlenMod_allowGuestConversion = false;
+        public static readonly bool GlenMod_allowGuestPrisonerConversion = false;
     }
 }

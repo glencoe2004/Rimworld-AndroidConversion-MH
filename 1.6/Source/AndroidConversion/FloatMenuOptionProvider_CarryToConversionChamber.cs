@@ -12,72 +12,82 @@ public class FloatMenuOptionProvider_CarryToConversionChamber : FloatMenuOptionP
 	protected override bool Multiselect => false;
 	protected override bool RequiresManipulation => true;
 
-	protected override FloatMenuOption GetSingleOptionFor(Pawn clickedPawn, FloatMenuContext context)
-	{
-		if (!clickedPawn.Downed)
-		{
-			return null;
-		}
+    protected override FloatMenuOption GetSingleOptionFor(Pawn clickedPawn, FloatMenuContext context)
+    {
+        if (!clickedPawn.Downed)
+        {
+            return null;
+        }
 
-		if (!context.FirstSelectedPawn.CanReserveAndReach(clickedPawn, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, ignoreOtherReservations: true))
-		{
-			return null;
-		}
+        if (!context.FirstSelectedPawn.CanReserveAndReach(clickedPawn, PathEndMode.OnCell, Danger.Deadly, 1, -1, null, ignoreOtherReservations: true))
+        {
+            return null;
+        }
 
-		Building_ConversionChamber conversionChamber = FindConversionChamberFor(clickedPawn, context.FirstSelectedPawn, ignoreOtherReservations: true);
-		if (conversionChamber == null)
-		{
-			return null;
-		}
+        Building_ConversionChamber conversionChamber = FindConversionChamberFor(clickedPawn, context.FirstSelectedPawn, ignoreOtherReservations: true);
+        if (conversionChamber == null)
+        {
+            return null;
+        }
 
-		TaggedString taggedString = "CarryToConversionChamber".Translate(clickedPawn.LabelCap, clickedPawn);
+        TaggedString taggedString = "CarryToConversionChamber".Translate(clickedPawn.LabelCap, clickedPawn);
 
-		if (clickedPawn.IsQuestLodger())
-		{
-			return FloatMenuUtility.DecoratePrioritizedTask(
-				new FloatMenuOption(taggedString + " (" + "ConversionChamberGuestsNotAllowed".Translate() + ")", null, MenuOptionPriority.Default, null, clickedPawn),
-				context.FirstSelectedPawn, clickedPawn);
-		}
+        // Check quest lodgers using AndroidGlobals setting
+        if (clickedPawn.IsQuestLodger() && !GlenMod_AndroidGlobals.GlenMod_allowGuestConversion)
+        {
+            return FloatMenuUtility.DecoratePrioritizedTask(
+                new FloatMenuOption(taggedString + " (" + "ConversionChamberGuestsNotAllowed".Translate() + ")", null, MenuOptionPriority.Default, null, clickedPawn),
+                context.FirstSelectedPawn, clickedPawn);
+        }
 
-		if (clickedPawn.GetExtraHostFaction() != null)
-		{
-			return FloatMenuUtility.DecoratePrioritizedTask(
-				new FloatMenuOption(taggedString + " (" + "ConversionChamberGuestPrisonersNotAllowed".Translate() + ")", null, MenuOptionPriority.Default, null, clickedPawn),
-				context.FirstSelectedPawn, clickedPawn);
-		}
+        // Check guest prisoners using AndroidGlobals setting
+        if (clickedPawn.GetExtraHostFaction() != null && !GlenMod_AndroidGlobals.GlenMod_allowGuestPrisonerConversion)
+        {
+            return FloatMenuUtility.DecoratePrioritizedTask(
+                new FloatMenuOption(taggedString + " (" + "ConversionChamberGuestPrisonersNotAllowed".Translate() + ")", null, MenuOptionPriority.Default, null, clickedPawn),
+                context.FirstSelectedPawn, clickedPawn);
+        }
 
-		if (!conversionChamber.CanEnter(clickedPawn))
-		{
-			return FloatMenuUtility.DecoratePrioritizedTask(
-				new FloatMenuOption(taggedString + " (" + "CannotBeConverted".Translate() + ")", null, MenuOptionPriority.Default, null, clickedPawn),
-				context.FirstSelectedPawn, clickedPawn);
-		}
+        // Check hostile pawns using AndroidGlobals setting
+        if (clickedPawn.HostileTo(Faction.OfPlayer) && !GlenMod_AndroidGlobals.GlenMod_allowHostileConversion)
+        {
+            return FloatMenuUtility.DecoratePrioritizedTask(
+                new FloatMenuOption(taggedString + " (" + "CarriedPawnHostile".Translate() + ")", null, MenuOptionPriority.Default, null, clickedPawn),
+                context.FirstSelectedPawn, clickedPawn);
+        }
 
-		Action action = delegate
-		{
-			Building_ConversionChamber chamber = FindConversionChamberFor(clickedPawn, context.FirstSelectedPawn);
-			if (chamber == null)
-			{
-				chamber = FindConversionChamberFor(clickedPawn, context.FirstSelectedPawn, ignoreOtherReservations: true);
-			}
-			if (chamber == null)
-			{
-				Messages.Message("CannotCarryToConversionChamber".Translate() + ": " + "NoConversionChamber".Translate(), clickedPawn, MessageTypeDefOf.RejectInput, historical: false);
-			}
-			else
-			{
-				Job job = JobMaker.MakeJob(AndroidConversionDefOf.DekCarryToConversionChamber, clickedPawn, chamber);
-				job.count = 1;
-				context.FirstSelectedPawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-			}
-		};
+        if (!conversionChamber.CanEnter(clickedPawn))
+        {
+            return FloatMenuUtility.DecoratePrioritizedTask(
+                new FloatMenuOption(taggedString + " (" + "CannotBeConverted".Translate() + ")", null, MenuOptionPriority.Default, null, clickedPawn),
+                context.FirstSelectedPawn, clickedPawn);
+        }
 
-		return FloatMenuUtility.DecoratePrioritizedTask(
-			new FloatMenuOption(taggedString, action, MenuOptionPriority.Default, null, clickedPawn),
-			context.FirstSelectedPawn, clickedPawn);
-	}
+        Action action = delegate
+        {
+            Building_ConversionChamber chamber = FindConversionChamberFor(clickedPawn, context.FirstSelectedPawn);
+            if (chamber == null)
+            {
+                chamber = FindConversionChamberFor(clickedPawn, context.FirstSelectedPawn, ignoreOtherReservations: true);
+            }
+            if (chamber == null)
+            {
+                Messages.Message("CannotCarryToConversionChamber".Translate() + ": " + "NoConversionChamber".Translate(), clickedPawn, MessageTypeDefOf.RejectInput, historical: false);
+            }
+            else
+            {
+                Job job = JobMaker.MakeJob(AndroidConversionDefOf.DekCarryToConversionChamber, clickedPawn, chamber);
+                job.count = 1;
+                context.FirstSelectedPawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+            }
+        };
 
-	public static Building_ConversionChamber FindConversionChamberFor(Pawn pawn, Pawn traveler, bool ignoreOtherReservations = false)
+        return FloatMenuUtility.DecoratePrioritizedTask(
+            new FloatMenuOption(taggedString, action, MenuOptionPriority.Default, null, clickedPawn),
+            context.FirstSelectedPawn, clickedPawn);
+    }
+
+    public static Building_ConversionChamber FindConversionChamberFor(Pawn pawn, Pawn traveler, bool ignoreOtherReservations = false)
 	{
 		foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs)
 		{

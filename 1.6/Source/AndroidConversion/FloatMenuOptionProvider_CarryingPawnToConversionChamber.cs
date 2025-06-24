@@ -32,55 +32,64 @@ public class FloatMenuOptionProvider_CarryingPawnToConversionChamber : FloatMenu
 		}
 	}
 
-	private bool CarryToConversionChamber(Building_ConversionChamber conversionChamber, FloatMenuContext context, Pawn carriedPawn, out FloatMenuOption option)
-	{
-		option = null;
+    private bool CarryToConversionChamber(Building_ConversionChamber conversionChamber, FloatMenuContext context, Pawn carriedPawn, out FloatMenuOption option)
+    {
+        option = null;
 
-		if (conversionChamber.HasAnyContents)
-		{
-			option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "ConversionChamberOccupied".Translate(), null);
-			return true;
-		}
+        if (conversionChamber.HasAnyContents)
+        {
+            option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "ConversionChamberOccupied".Translate(), null);
+            return true;
+        }
 
-		if (!conversionChamber.CanEnter(carriedPawn))
-		{
-			option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "CannotBeConverted".Translate(), null);
-			return true;
-		}
+        if (!conversionChamber.CanEnter(carriedPawn))
+        {
+            option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "CannotBeConverted".Translate(), null);
+            return true;
+        }
 
-		if (context.FirstSelectedPawn.HostileTo(carriedPawn))
-		{
-			option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "CarriedPawnHostile".Translate().CapitalizeFirst(), null);
-			return true;
-		}
+        if (context.FirstSelectedPawn.HostileTo(carriedPawn))
+        {
+            option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "CarriedPawnHostile".Translate().CapitalizeFirst(), null);
+            return true;
+        }
 
-		if (!context.FirstSelectedPawn.CanReach(conversionChamber, PathEndMode.InteractionCell, Danger.Deadly))
-		{
-			option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "NoPath".Translate().CapitalizeFirst(), null);
-			return true;
-		}
+        if (!context.FirstSelectedPawn.CanReach(conversionChamber, PathEndMode.InteractionCell, Danger.Deadly))
+        {
+            option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "NoPath".Translate().CapitalizeFirst(), null);
+            return true;
+        }
 
-		if (carriedPawn.IsQuestLodger())
-		{
-			option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "ConversionChamberGuestsNotAllowed".Translate(), null);
-			return true;
-		}
+        // Check quest lodgers using AndroidGlobals setting
+        if (carriedPawn.IsQuestLodger() && !GlenMod_AndroidGlobals.GlenMod_allowGuestConversion)
+        {
+            option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "ConversionChamberGuestsNotAllowed".Translate(), null);
+            return true;
+        }
 
-		if (carriedPawn.GetExtraHostFaction() != null)
-		{
-			option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "ConversionChamberGuestPrisonersNotAllowed".Translate(), null);
-			return true;
-		}
+        // Check guest prisoners using AndroidGlobals setting
+        if (carriedPawn.GetExtraHostFaction() != null && !GlenMod_AndroidGlobals.GlenMod_allowGuestPrisonerConversion)
+        {
+            option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "ConversionChamberGuestPrisonersNotAllowed".Translate(), null);
+            return true;
+        }
 
-		option = FloatMenuUtility.DecoratePrioritizedTask(
-			new FloatMenuOption("PlaceIn".Translate(carriedPawn, conversionChamber), delegate
-			{
-				conversionChamber.SetForbidden(value: false, warnOnFail: false);
-				Job job = JobMaker.MakeJob(AndroidConversionDefOf.DekCarryToConversionChamberDrafted, context.FirstSelectedPawn.carryTracker.CarriedThing, conversionChamber);
-				job.count = 1;
-				context.FirstSelectedPawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-			}),
-			context.FirstSelectedPawn, conversionChamber);
-		return true;
-	}
+        // Check hostile pawns using AndroidGlobals setting
+        if (carriedPawn.HostileTo(Faction.OfPlayer) && !GlenMod_AndroidGlobals.GlenMod_allowHostileConversion)
+        {
+            option = new FloatMenuOption("CannotPlaceIn".Translate(carriedPawn, conversionChamber) + ": " + "CarriedPawnHostile".Translate(), null);
+            return true;
+        }
+
+        option = FloatMenuUtility.DecoratePrioritizedTask(
+            new FloatMenuOption("PlaceIn".Translate(carriedPawn, conversionChamber), delegate
+            {
+                conversionChamber.SetForbidden(value: false, warnOnFail: false);
+                Job job = JobMaker.MakeJob(AndroidConversionDefOf.DekCarryToConversionChamberDrafted, context.FirstSelectedPawn.carryTracker.CarriedThing, conversionChamber);
+                job.count = 1;
+                context.FirstSelectedPawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+            }),
+            context.FirstSelectedPawn, conversionChamber);
+        return true;
+    }
 }

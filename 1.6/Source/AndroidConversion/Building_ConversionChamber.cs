@@ -586,13 +586,30 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 		return false;
 	}
 
+	// Also update the GetFloatMenuOptions method to use AndroidGlobals settings
 	public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn myPawn)
 	{
-		if (myPawn.IsQuestLodger())
+		// Check for quest lodgers using AndroidGlobals setting
+		if (myPawn.IsQuestLodger() && !GlenMod_AndroidGlobals.GlenMod_allowGuestConversion)
 		{
-			yield return new FloatMenuOption("CannotUseReason".Translate("CryptosleepCasketGuestsNotAllowed".Translate()), null);
+			yield return new FloatMenuOption("CannotUseReason".Translate("ConversionChamberGuestsNotAllowed".Translate()), null);
 			yield break;
 		}
+
+		// Check for guest prisoners using AndroidGlobals setting
+		if (myPawn.GetExtraHostFaction() != null && !GlenMod_AndroidGlobals.GlenMod_allowGuestPrisonerConversion)
+		{
+			yield return new FloatMenuOption("CannotUseReason".Translate("ConversionChamberGuestPrisonersNotAllowed".Translate()), null);
+			yield break;
+		}
+
+		// Check for hostile pawns using AndroidGlobals setting
+		if (myPawn.HostileTo(Faction.OfPlayer) && !GlenMod_AndroidGlobals.GlenMod_allowHostileConversion)
+		{
+			yield return new FloatMenuOption("CannotUseReason".Translate("CarriedPawnHostile".Translate()), null);
+			yield break;
+		}
+
 		foreach (FloatMenuOption floatMenuOption in base.GetFloatMenuOptions(myPawn))
 		{
 			yield return floatMenuOption;
@@ -621,6 +638,7 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 		};
 		yield return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(text, action), myPawn, this);
 	}
+
 
 	public override void SpawnSetup(Map map, bool respawningAfterLoad)
 	{
