@@ -42,6 +42,8 @@ namespace AndroidConversion
         // JobDefs
         public static JobDef DekFillConversionChamber;
         public static JobDef DekEnterConversionChamber;
+        public static JobDef DekCarryToConversionChamber;
+        public static JobDef DekCarryToConversionChamberDrafted;
 
         // ResearchProjectDefs
         public static ResearchProjectDef ChJAndroidUpgrade_Hub;

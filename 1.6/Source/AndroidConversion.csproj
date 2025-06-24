@@ -66,6 +66,8 @@
     <Compile Include="AndroidConversion\AndroidModDef.cs" />
     <Compile Include="AndroidConversion\AndroidModGroupDef.cs" />
     <Compile Include="AndroidConversion\Building_ConversionChamber.cs" />
+    <Compile Include="AndroidConversion\FloatMenuOptionProvider_CarryingPawnToConversionChamber.cs" />
+    <Compile Include="AndroidConversion\FloatMenuOptionProvider_CarryToConversionChamber.cs" />
     <Compile Include="AndroidConversion\GlenMod_AndroidUpgradeGroupDef.cs" />
     <Compile Include="AndroidConversion\GlenMod_AndroidUpgradeHediffProperties.cs" />
     <Compile Include="AndroidConversion\GlenMod_AndroidUtility.cs" />
@@ -86,6 +88,8 @@
     <Compile Include="AndroidConversion\GlenMod_UpgradeCommand_Skin.cs" />
     <Compile Include="AndroidConversion\GlenMod_UpgradeMaker.cs" />
     <Compile Include="AndroidConversion\ITab_ContentsConversionChamber.cs" />
+    <Compile Include="AndroidConversion\JobDriver_CarryToConversionChamber.cs" />
+    <Compile Include="AndroidConversion\JobDriver_CarryToConversionChamberDrafted.cs" />
     <Compile Include="AndroidConversion\JobDriver_EnterConversionChamber.cs" />
     <Compile Include="AndroidConversion\JobDriver_FillConversionChamber.cs" />
     <Compile Include="AndroidConversion\ModCommand.cs" />

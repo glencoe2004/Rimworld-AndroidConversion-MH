@@ -12,7 +12,7 @@ namespace AndroidConversion;
 
 public class Building_ConversionChamber : Building, IThingHolder, IStoreSettingsParent
 {
-	protected bool contentsKnown;
+	public bool contentsKnown;
 
 	private CompPowerTrader _power;
 
@@ -26,7 +26,7 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 
 	public ModdingStatus ChamberStatus;
 
-	protected ThingOwner innerContainer;
+	public ThingOwner innerContainer;
 
 	public ThingOrderProcessor orderProcessor;
 

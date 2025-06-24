@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- Conversion Chamber Carrying -->
+	<CarryToConversionChamber>Carry {0} to conversion chamber</CarryToConversionChamber>
+	<CannotCarryToConversionChamber>Cannot carry to conversion chamber</CannotCarryToConversionChamber>
+	<NoConversionChamber>No conversion chamber available</NoConversionChamber>
+	<ConversionChamberOccupied>Conversion chamber occupied</ConversionChamberOccupied>
+	<ConversionChamberGuestsNotAllowed>Guests not allowed</ConversionChamberGuestsNotAllowed>
+	<ConversionChamberGuestPrisonersNotAllowed>Guest prisoners not allowed</ConversionChamberGuestPrisonersNotAllowed>
+	<CarriedPawnHostile>Carried pawn is hostile</CarriedPawnHostile>
+</LanguageData>

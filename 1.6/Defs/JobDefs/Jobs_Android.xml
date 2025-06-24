@@ -10,4 +10,14 @@
 		<driverClass>AndroidConversion.JobDriver_EnterConversionChamber</driverClass>
 		<reportString>entering TargetA.</reportString>
 	</JobDef>
+	<JobDef>
+		<defName>DekCarryToConversionChamber</defName>
+		<driverClass>AndroidConversion.JobDriver_CarryToConversionChamber</driverClass>
+		<reportString>carrying TargetA to TargetB.</reportString>
+	</JobDef>
+	<JobDef>
+		<defName>DekCarryToConversionChamberDrafted</defName>
+		<driverClass>AndroidConversion.JobDriver_CarryToConversionChamberDrafted</driverClass>
+		<reportString>carrying TargetA to TargetB.</reportString>
+	</JobDef>
 </Defs>
