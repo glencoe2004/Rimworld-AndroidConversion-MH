@@ -13,44 +13,54 @@ namespace AndroidConversion
 		public override void Apply(Pawn customTarget = null)
 		{
 			base.Apply(customTarget);
-			Pawn pawn = null;
-			pawn = ((customTarget == null) ? customizationWindow.androidConverter.newPawn : customTarget);
 
-			AlienPartGenerator.AlienComp alienComp = pawn.TryGetComp<AlienPartGenerator.AlienComp>();
-			if (alienComp != null)
+			// Only change skin color if the setting allows it
+			if (def.changeSkinColor)
 			{
-				originalSkinColor = alienComp.ColorChannels["skin"].first;
-				originalSkinColorTwo = alienComp.ColorChannels["skin"].second;
-				alienComp.ColorChannels["skin"].first = def.newSkinColor;
-				alienComp.ColorChannels["skin"].second = def.newSkinColor;
+				Pawn pawn = null;
+				pawn = ((customTarget == null) ? customizationWindow.androidConverter.newPawn : customTarget);
 
-				if (customizationWindow != null)
+				AlienPartGenerator.AlienComp alienComp = pawn.TryGetComp<AlienPartGenerator.AlienComp>();
+				if (alienComp != null)
 				{
-					customizationWindow.refreshAndroidPortrait = true;
-					return;
+					originalSkinColor = alienComp.ColorChannels["skin"].first;
+					originalSkinColorTwo = alienComp.ColorChannels["skin"].second;
+					alienComp.ColorChannels["skin"].first = def.newSkinColor;
+					alienComp.ColorChannels["skin"].second = def.newSkinColor;
+
+					if (customizationWindow != null)
+					{
+						customizationWindow.refreshAndroidPortrait = true;
+						return;
+					}
+					PortraitsCache.SetDirty(pawn);
+					PortraitsCache.PortraitsCacheUpdate();
 				}
-				PortraitsCache.SetDirty(pawn);
-				PortraitsCache.PortraitsCacheUpdate();
-			}
-			else
-			{
-				Log.Error("alienComp is null! Impossible to alter skin color without it.");
+				else
+				{
+					Log.Error("alienComp is null! Impossible to alter skin color without it.");
+				}
 			}
 		}
 
 		public override void Undo()
 		{
 			base.Undo();
-			AlienPartGenerator.AlienComp alienComp = customizationWindow.androidConverter.newPawn.TryGetComp<AlienPartGenerator.AlienComp>();
-			if (alienComp != null)
+
+			// Only restore skin color if it was originally changed
+			if (def.changeSkinColor)
 			{
-				alienComp.ColorChannels["skin"].first = originalSkinColor;
-				alienComp.ColorChannels["skin"].second = originalSkinColorTwo;
-				customizationWindow.refreshAndroidPortrait = true;
-			}
-			else
-			{
-				Log.Error("alienComp is null! Impossible to alter skin color without it.");
+				AlienPartGenerator.AlienComp alienComp = customizationWindow.androidConverter.newPawn.TryGetComp<AlienPartGenerator.AlienComp>();
+				if (alienComp != null)
+				{
+					alienComp.ColorChannels["skin"].first = originalSkinColor;
+					alienComp.ColorChannels["skin"].second = originalSkinColorTwo;
+					customizationWindow.refreshAndroidPortrait = true;
+				}
+				else
+				{
+					Log.Error("alienComp is null! Impossible to alter skin color without it.");
+				}
 			}
 		}
 	}
