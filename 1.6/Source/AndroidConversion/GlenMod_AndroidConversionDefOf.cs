@@ -39,6 +39,9 @@ namespace AndroidConversion
         public static HediffDef ChjAndroidUpgrade_MechaniteHive;
         public static HediffDef ChjAndroidUpgrade_PsychicAttunement;
 
+        // Android Tiers Core hediffs
+        public static HediffDef ATR_AutonomousCore;
+
         // JobDefs
         public static JobDef DekFillConversionChamber;
         public static JobDef DekEnterConversionChamber;

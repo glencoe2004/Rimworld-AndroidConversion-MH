@@ -363,6 +363,12 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				AndroidUtility.AddAndroidHediff(currentPawn);
 			}
 
+			// Add ATR_AutonomousCore to artificial brain for TX3 conversions if not already present
+			if (HumanToTX3)
+			{
+				AddAutonomousCoreIfNeeded(currentPawn);
+			}
+
 			// Apply transferred hediff snapshots AFTER race change is complete
 			if (isHumanToAndroid && hediffSnapshots != null)
 			{
@@ -489,6 +495,49 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			// Clean up
 			Open();
 			ResetProcess();
+		}
+	}
+
+	/// <summary>
+	/// Adds ATR_AutonomousCore hediff to artificial brain if the pawn doesn't already have one
+	/// </summary>
+	private void AddAutonomousCoreIfNeeded(Pawn pawn)
+	{
+		try
+		{
+			// Check if pawn already has ATR_AutonomousCore hediff
+			if (AndroidConversionDefOf.ATR_AutonomousCore != null &&
+				pawn.health.hediffSet.HasHediff(AndroidConversionDefOf.ATR_AutonomousCore))
+			{
+				Log.Message($"Pawn {pawn.Name} already has ATR_AutonomousCore, skipping");
+				return;
+			}
+
+			// Find the artificial brain body part
+			BodyPartRecord artificialBrain = pawn.RaceProps.body.AllParts
+				.FirstOrDefault(part => part.def.defName == "ATR_ArtificialBrain");
+
+			if (artificialBrain == null)
+			{
+				Log.Warning($"Could not find ATR_ArtificialBrain body part on {pawn.Name} for ATR_AutonomousCore hediff");
+				return;
+			}
+
+			// Add ATR_AutonomousCore hediff to artificial brain
+			if (AndroidConversionDefOf.ATR_AutonomousCore != null)
+			{
+				Hediff autonomousCore = HediffMaker.MakeHediff(AndroidConversionDefOf.ATR_AutonomousCore, pawn, artificialBrain);
+				pawn.health.AddHediff(autonomousCore);
+				Log.Message($"Successfully added ATR_AutonomousCore to {pawn.Name}'s artificial brain");
+			}
+			else
+			{
+				Log.Warning("ATR_AutonomousCore HediffDef not found in DefOf cache - make sure Android Tiers Core is loaded");
+			}
+		}
+		catch (Exception ex)
+		{
+			Log.Error($"Error adding ATR_AutonomousCore to {pawn.Name}: {ex.Message}");
 		}
 	}
 
