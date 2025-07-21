@@ -901,12 +901,27 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 	}
 
 	// Legacy Tick method - now only handles critical per-tick operations
+	// Legacy Tick method - now handles critical per-tick operations
 	protected override void Tick()
 	{
 		base.Tick();
 
 		// Track ticks for VTR operations
 		ticksSinceLastVTRUpdate++;
+
+		// CRITICAL: Handle filling status checks every tick for WorkGiver responsiveness
+		if (ChamberStatus == ModdingStatus.Filling)
+		{
+			// Check if we have all required materials every tick when filling
+			IEnumerable<ThingOrderRequest> enumerable = orderProcessor.PendingRequests();
+			bool hasAllMaterials = enumerable == null || enumerable.Count() == 0;
+
+			if (hasAllMaterials)
+			{
+				ChamberStatus = ModdingStatus.Modding;
+				needsStatusCheck = true;
+			}
+		}
 
 		// Handle power adjustments more frequently for responsiveness
 		if (needsPowerAdjustment || ticksSinceLastVTRUpdate % 5 == 0)
@@ -983,18 +998,7 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			}
 		}
 
-		// Check pending requests less frequently than every tick
-		IEnumerable<ThingOrderRequest> enumerable = orderProcessor.PendingRequests();
-		bool flag = enumerable == null;
-		if (!flag && enumerable.Count() == 0)
-		{
-			flag = true;
-		}
-		if (flag)
-		{
-			ChamberStatus = ModdingStatus.Modding;
-			needsStatusCheck = true;
-		}
+		// Status checking moved to Tick() method for WorkGiver responsiveness
 	}
 
 	private void handleModdingTickVTR(int delta)
