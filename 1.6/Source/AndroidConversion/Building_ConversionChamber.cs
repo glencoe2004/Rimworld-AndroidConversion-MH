@@ -46,6 +46,8 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 
 	public Pawn newPawn;
 
+	private int soundCheckCooldown = 0;
+
 	public bool HasAnyContents => innerContainer.Count > 0;
 
 	public bool CanOpen => HasAnyContents;
@@ -833,8 +835,16 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 		}
 	}
 
+	// FIXED: Add proper cleanup in destroy method
 	public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 	{
+		// Clean up sound sustainer
+		if (soundSustainer != null && !soundSustainer.Ended)
+		{
+			soundSustainer.End();
+			soundSustainer = null;
+		}
+
 		if ((int)mode > 0)
 		{
 			ingredients.TryDropAll(base.PositionHeld, base.MapHeld, ThingPlaceMode.Near);
@@ -930,10 +940,21 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			needsPowerAdjustment = false;
 		}
 
-		// Handle sound sustainer every tick for smoothness
-		if (!powerComp.PowerOn && soundSustainer != null && !soundSustainer.Ended)
+		// FIXED: Only handle sound ending conditions here, not creation
+		// Handle sound sustainer ending conditions every tick for responsiveness
+		if (soundSustainer != null && !soundSustainer.Ended)
 		{
-			soundSustainer.End();
+			if (!powerComp.PowerOn || (flickableComp != null && !flickableComp.SwitchIsOn))
+			{
+				soundSustainer.End();
+				soundSustainer = null; // Clear the reference
+			}
+		}
+
+		// Decrement sound check cooldown
+		if (soundCheckCooldown > 0)
+		{
+			soundCheckCooldown--;
 		}
 
 		// Handle flickable component check
@@ -976,10 +997,12 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 				return;
 		}
 
-		// End sound sustainer if not in active state
-		if (soundSustainer != null && !soundSustainer.Ended)
+		// FIXED: Only end sound sustainer here if not in active state
+		if (soundSustainer != null && !soundSustainer.Ended &&
+			ChamberStatus != ModdingStatus.Modding)
 		{
 			soundSustainer.End();
+			soundSustainer = null;
 		}
 	}
 
@@ -1030,19 +1053,34 @@ public class Building_ConversionChamber : Building, IThingHolder, IStoreSettings
 			}
 		}
 
-		// Handle sound sustainer
-		if (soundSustainer == null || soundSustainer.Ended)
+		// FIXED: Handle sound sustainer with proper cooldown and checks
+		if (soundCheckCooldown <= 0 && (soundSustainer == null || soundSustainer.Ended))
 		{
 			SoundDef craftingSound = conversionProperties.craftingSound;
 			if (craftingSound != null && craftingSound.sustain)
 			{
-				SoundInfo soundInfo = SoundInfo.InMap(this, MaintenanceType.PerTick);
-				soundSustainer = craftingSound.TrySpawnSustainer(soundInfo);
+				// Only create sound if we have power and are switched on
+				if (powerComp.PowerOn && (flickableComp == null || flickableComp.SwitchIsOn))
+				{
+					SoundInfo soundInfo = SoundInfo.InMap(this, MaintenanceType.PerTick);
+					soundSustainer = craftingSound.TrySpawnSustainer(soundInfo);
+					soundCheckCooldown = 60; // Prevent constant recreation (1 second cooldown)
+				}
 			}
 		}
+
+		// FIXED: Only maintain sound if it exists and we should be playing it
 		if (soundSustainer != null && !soundSustainer.Ended)
 		{
-			soundSustainer.Maintain();
+			if (powerComp.PowerOn && (flickableComp == null || flickableComp.SwitchIsOn))
+			{
+				soundSustainer.Maintain();
+			}
+			else
+			{
+				soundSustainer.End();
+				soundSustainer = null;
+			}
 		}
 
 		// Process resources - scale by delta
