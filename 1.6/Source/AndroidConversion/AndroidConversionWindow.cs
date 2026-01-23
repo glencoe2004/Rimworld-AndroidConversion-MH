@@ -45,6 +45,9 @@ public class AndroidConversionWindow : Window
 	// Add field to track TX3 to TX4 conversion
 	public bool convertTX3ToTX4 = false;
 
+	// Add field to track human to android conversion
+	public bool convertHumanToAndroid = true;
+
 	private bool doAndroidRecipes = true;
 
 
@@ -440,9 +443,29 @@ public class AndroidConversionWindow : Window
 
 			GUI.color = oldColor;
 		}
+		else if (current.IsHuman())
+		{
+			// Make it a clickable button for humans to toggle android conversion
+			string buttonText = convertHumanToAndroid ? "Convert to Android (Selected)" : "Keep Human";
+
+			// Change button color based on selection state
+			Color oldColor = GUI.color;
+			if (convertHumanToAndroid)
+			{
+				GUI.color = Color.green;
+			}
+
+			if (Widgets.ButtonText(location, buttonText))
+			{
+				convertHumanToAndroid = !convertHumanToAndroid;
+				RefreshCosts(); // Refresh costs when toggling conversion
+			}
+
+			GUI.color = oldColor;
+		}
 		else
 		{
-			// For non-TX3 pawns, just display the race name (non-interactive)
+			// For other pawns, just display the race name (non-interactive)
 			Widgets.DrawBox(location);
 			Widgets.Label(location, current.kindDef.race.LabelCap);
 		}
@@ -576,7 +599,7 @@ public class AndroidConversionWindow : Window
 			}
 		}
 		Pawn currentPawn = androidConverter.currentPawn;
-		if (!currentPawn.IsTX3() && currentPawn.IsHuman()) // No confirm for this - upgrading human to TX3 is not optional
+		if (!currentPawn.IsTX3() && currentPawn.IsHuman() && convertHumanToAndroid) // Only add TX3 conversion costs if toggle is enabled
 		{
 			// Use cached DefOf instead of DefDatabase lookup
 			ThingDef tx3GeneratorDef = AndroidConversionDefOf.ATPP_TX3AndroidGenerator;
@@ -772,7 +795,7 @@ public class AndroidConversionWindow : Window
 
 		Pawn cerPawn = androidConverter.currentPawn;
 
-		if (!cerPawn.IsTX3() && cerPawn.IsHuman()) { // Convert human to TX3
+		if (!cerPawn.IsTX3() && cerPawn.IsHuman() && convertHumanToAndroid) { // Convert human to TX3 only if toggle is enabled
 			androidConverter.HumanToTX3 = true;
 		}
 
